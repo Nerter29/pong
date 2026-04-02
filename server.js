@@ -36,6 +36,8 @@ function assignPlayers(ws){
         type: "assign",
         player: playerId
     }));
+
+    return playerId;
 }
 
 
@@ -54,7 +56,7 @@ wss.on("connection", function (ws) {
         return;
     }
 
-    assignPlayers(ws)
+    var playerId = assignPlayers(ws)
 
     //start game if we have 2 players
     if (players.length === 2) {
