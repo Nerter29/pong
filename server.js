@@ -9,7 +9,7 @@ var playerNumber = 2;
 
 var players = [];
 
-function assignPlayers(){
+function assignPlayers(ws){
     // this function assigns ids to the player, add it to the list, and send a message to the client to tell them.
 
     var playerId;
@@ -54,7 +54,7 @@ wss.on("connection", function (ws) {
         return;
     }
 
-    assignPlayers()
+    assignPlayers(ws)
 
     //start game if we have 2 players
     if (players.length === 2) {
