@@ -13,4 +13,33 @@ ws.onmessage = function(event) {
     if (data.type === "start") {
         console.log("game started for client !");
     }
+
+    if (data.type === "input") {
+        console.log("input received : ", data);
+    }
 };
+
+//input
+document.addEventListener("keydown", function(event) {
+    if (!player){
+        return;
+    } 
+
+    let input = "";
+
+    if (event.key === "ArrowUp") {
+        input = "up";
+    }
+
+    if (event.key === "ArrowDown") {
+        input = "down";
+    }
+
+    if (input) {
+        ws.send(JSON.stringify({
+            type: "input",
+            player: player,
+            input: input
+        }));
+    }
+});

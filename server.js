@@ -9,20 +9,9 @@ var playerNumber = 2;
 
 var players = [];
 
-wss.on("connection", function (ws) {
-    console.log("connexion received");
+function assignPlayers(){
+    // this function assigns ids to the player, add it to the list, and send a message to the client to tell them.
 
-
-    if (players.length >= 2) {
-        ws.send(JSON.stringify({
-            type: "error",
-            message: "server full"
-        }));
-        ws.close();
-        return;
-    }
-
-    //assign player
     var playerId;
 
     if (players.length === 0) {
@@ -47,8 +36,27 @@ wss.on("connection", function (ws) {
         type: "assign",
         player: playerId
     }));
+}
 
-    //start game
+
+wss.on("connection", function (ws) {
+
+    //----------------------------------------------Connexions-----------------------------------------------
+
+
+    //unconnect the client if the server is full
+    if (players.length >= 2) {
+        ws.send(JSON.stringify({
+            type: "error",
+            message: "server full"
+        }));
+        ws.close();
+        return;
+    }
+
+    assignPlayers()
+
+    //start game if we have 2 players
     if (players.length === 2) {
         console.log("start of the game");
 
@@ -59,10 +67,35 @@ wss.on("connection", function (ws) {
         }
     }
 
+
+    //----------------------------------------------Game-----------------------------------------------
+
+
     ws.on("message", function (message) {
-        console.log("Message recu:", message.toString());
+        let data;
+
+        try {
+            data = JSON.parse(message.toString());
+        } catch (e) {
+            return;
+        }
+
+        if (data.type === "input") {
+            console.log("Input reçu du joueur " + playerId + ": " + data.input);
+
+            //send the input to every clients
+            for (var i = 0; i < players.length; i++) {
+                players[i].socket.send(JSON.stringify({
+                    type: "input",
+                    player: playerId,
+                    input: data.input
+                }));
+            }
+        }
     });
 
+
+    //----------------------------------------------Unconnexion-----------------------------------------------
     ws.on("close", function () {
         console.log("Joueur " + playerId + " d  connect  ");
 
