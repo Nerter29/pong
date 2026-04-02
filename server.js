@@ -12,7 +12,10 @@ wss.on("connection", function (ws) {
 
 
     if (players.length >= 2) {
-        ws.send("server full");
+        ws.send(JSON.stringify({
+            type: "error",
+            message: "server full"
+        }));
         ws.close();
         return;
     }

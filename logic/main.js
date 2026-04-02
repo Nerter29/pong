@@ -1,15 +1,16 @@
 let ws = new WebSocket("wss://nerter.fr/pong/");
 
-ws.onopen = function() {
-    console.log("Connecté au serveur");
-
-    ws.send("Bonjour serveur !");
-};
+let player = null;
 
 ws.onmessage = function(event) {
-    console.log("Message du serveur:", event.data);
-};
+    let data = JSON.parse(event.data);
 
-ws.onclose = function() {
-    console.log("Déconnecté");
+    if (data.type === "assign") {
+        player = data.player;
+        console.log("im", player);
+    }
+
+    if (data.type === "start") {
+        console.log("game started for client !");
+    }
 };
