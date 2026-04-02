@@ -5,6 +5,8 @@ const wss = new WebSocket.Server({ port: port });
 
 console.log("pong web socket running");
 
+var playerNumber = 2;
+
 var players = [];
 
 wss.on("connection", function (ws) {
@@ -26,9 +28,14 @@ wss.on("connection", function (ws) {
     if (players.length === 0) {
         playerId = 1;
     } else {
-        playerId = 2;
+        if(players[0].id === 1){
+            playerId = 2;
+        }
+        else{
+            playerId = 1;
+        }
     }  
-
+    
     players.push({
         id: playerId,
         socket: ws
