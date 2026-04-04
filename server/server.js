@@ -86,7 +86,6 @@ wss.on("connection", function (ws) {
         }
 
         if (data.type === "input") {
-            console.log("Input reçu du joueur " + playerId + ": " + data.input);
 
             //handle inputs of clients
             game.handleInput(playerId, data.input);
@@ -96,7 +95,7 @@ wss.on("connection", function (ws) {
             for (var i = 0; i < players.length; i++) {
                 players[i].socket.send(JSON.stringify({
                     type: "state",
-                    state: state,
+                    state: state
                 }));
             }
         }

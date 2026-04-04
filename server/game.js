@@ -5,7 +5,7 @@ class Game {
             2: { y: 50 }
         };
 
-        this.speed = 5;
+        this.speed = 1;
     }
 
     handleInput(playerId, input) {
@@ -20,7 +20,6 @@ class Game {
             player.y += this.speed;
         }
 
-        // limite (ex: terrain 0 → 100)
         if (player.y < 0) player.y = 0;
         if (player.y > 100) player.y = 100;
     }
