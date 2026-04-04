@@ -9,6 +9,9 @@ var playerNumber = 2;
 
 var players = [];
 
+const Game = require("./game");
+const game = new Game();
+
 function assignPlayers(ws){
     // this function assigns ids to the player, add it to the list, and send a message to the client to tell them.
 
@@ -85,12 +88,15 @@ wss.on("connection", function (ws) {
         if (data.type === "input") {
             console.log("Input reçu du joueur " + playerId + ": " + data.input);
 
-            //send the input to every clients
+            //handle inputs of clients
+            game.handleInput(playerId, data.input);
+
+            //send back the state to every clients
+            const state = game.getState();
             for (var i = 0; i < players.length; i++) {
                 players[i].socket.send(JSON.stringify({
-                    type: "input",
-                    player: playerId,
-                    input: data.input
+                    type: "state",
+                    state: state,
                 }));
             }
         }
@@ -99,7 +105,7 @@ wss.on("connection", function (ws) {
 
     //----------------------------------------------Unconnexion-----------------------------------------------
     ws.on("close", function () {
-        console.log("Joueur " + playerId + " d  connect  ");
+        console.log("Joueur " + playerId + " déconnecté  ");
 
         // remove player
         for (var i = 0; i < players.length; i++) {

@@ -14,12 +14,12 @@ ws.onmessage = function(event) {
         console.log("game started for client !");
     }
 
-    if (data.type === "input") {
-        console.log("input received : ", data);
+    if (data.type === "state") {
+        console.log("state received : ", data.state);
     }
 };
 
-//input
+//send input
 document.addEventListener("keydown", function(event) {
     if (!player){
         return;
