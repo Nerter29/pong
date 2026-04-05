@@ -22,7 +22,7 @@ class Game {
             
         }
 
-        this.playerSpeed = 1;
+        this.playerSpeed = 3;
     }
 
     handleInput(playerId, input) {
