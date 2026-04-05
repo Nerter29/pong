@@ -81,20 +81,20 @@ wss.on("connection", function (ws) {
 
 
     ws.on("message", function (message) {
-        let message;
+        let messageParsed;
 
         try {
-            message = JSON.parse(message.toString());
+            messageParsed = JSON.parse(message.toString());
         } catch (e) {
             console.log("json message bad format")
             return;
         }
 
-        if (message.type === "input") {
-            console.log("input recu : " + message.input + " de " + message.playerId)
+        if (messageParsed.type === "input") {
+            console.log("input recu : " + messageParsed.input + " de " + messageParsed.playerId)
 
             //handle inputs of clients
-            game.handleInput(playerId, message.input);
+            game.handleInput(playerId, messageParsed.input);
 
             //send the state to every clients
             sendData(game.getState(), "state")
