@@ -27,18 +27,19 @@ class Game {
 
     handleInput(playerId, input) {
         let player = this.players[playerId];
-        if (!player) return;
+        if (player){
+            if (input === "up" && player.y > 0) {
+                player.y -= this.playerSpeed;
+            }
 
-        if (input === "up") {
-            player.y -= this.playerSpeed;
+            if (input === "down" && player.y + this.paddleHeight < this.screenSize[1]) {
+                player.y += this.playerSpeed;
+            }
+
+
         }
 
-        if (input === "down") {
-            player.y += this.playerSpeed;
-        }
-
-        if (player.y < 0) player.y = 0;
-        if (player.y > 500) player.y = 500;
+        
     }
 
     getState() {

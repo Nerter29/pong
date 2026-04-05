@@ -1,3 +1,6 @@
+import {lerp}  from './utils.js';
+
+
 class Paddle{
     constructor(x, y, width, height){
         this.x = x;

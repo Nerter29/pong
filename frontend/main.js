@@ -22,6 +22,7 @@ function start(){
         
         setUpCanvas(gameCanvas, startInfo.screenWidth, startInfo.screenHeight);
         canvasSize = [gameCanvas.width, gameCanvas.height];
+        paddleList = [];
         spawnPaddles(paddleList, canvasSize, startInfo)
     }
 
@@ -65,7 +66,7 @@ ws.onmessage = function(event) {
     if (message.type === "state") {
         gameState = message.data;
 
-        console.log("state received : ", gameState);
+        //console.log("state received : ", gameState);
     }
 };
 
@@ -74,12 +75,13 @@ const keys = {};
 
 document.addEventListener("keydown", (event) => {
     keys[event.key] = true;
-    event.preventDefault();
+    if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+        event.preventDefault(); // block scroll with arrows
+    }
 });
 
 document.addEventListener("keyup", (event) => {
     keys[event.key] = false;
-    event.preventDefault();
 });
 
 function sendInput(){
