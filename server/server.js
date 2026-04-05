@@ -44,10 +44,10 @@ function assignPlayers(ws){
 }
 
 
-function sendData(data, name){
+function sendData(data, type){
     for (var i = 0; i < players.length; i++) {
         players[i].socket.send(JSON.stringify({
-            type: name,
+            type: type,
             data: data
         }));
     }
@@ -81,18 +81,20 @@ wss.on("connection", function (ws) {
 
 
     ws.on("message", function (message) {
-        let data;
+        let message;
 
         try {
-            data = JSON.parse(message.toString());
+            message = JSON.parse(message.toString());
         } catch (e) {
+            console.log("json message bad format")
             return;
         }
 
-        if (data.type === "input") {
+        if (message.type === "input") {
+            console.log("input recu : " + message.input + " de " + message.playerId)
 
             //handle inputs of clients
-            game.handleInput(playerId, data.input);
+            game.handleInput(playerId, message.input);
 
             //send the state to every clients
             sendData(game.getState(), "state")

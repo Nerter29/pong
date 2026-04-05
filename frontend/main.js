@@ -12,7 +12,7 @@ var startInfo = null;
 var running = false;
 
 ws.onmessage = function(event) {
-    let message = JSON.parse(event.message);
+    let message = JSON.parse(event.data);
 
     if (message.type === "assign") {
         playerId = message.player;
@@ -20,7 +20,7 @@ ws.onmessage = function(event) {
     }
 
     if (message.type === "start") {
-        console.log("game started for client !");
+        console.log("game started !");
         startInfo = message.data;
         running = true
     }
