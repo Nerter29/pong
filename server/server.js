@@ -18,13 +18,13 @@ function assignPlayers(ws){
     var playerId;
 
     if (players.length === 0) {
-        playerId = 1;
+        playerId = 0;
     } else {
-        if(players[0].id === 1){
-            playerId = 2;
+        if(players[0].id === 0){
+            playerId = 1;
         }
         else{
-            playerId = 1;
+            playerId = 0;
         }
     }  
     
@@ -104,14 +104,13 @@ wss.on("connection", function (ws) {
 
     //----------------------------------------------Unconnexion-----------------------------------------------
     ws.on("close", function () {
-        console.log("Joueur " + playerId + " déconnecté  ");
 
         // remove player
         for (var i = 0; i < players.length; i++) {
-        if (players[i].socket === ws) {
-            players.splice(i, 1);
-            break;
-        }
+            if (players[i].socket === ws) {
+                players.splice(i, 1);
+                break;
+            }
         }
     });
 });

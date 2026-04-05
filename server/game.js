@@ -1,11 +1,13 @@
 class Game {
     constructor() {
+        this.screenSize = [1000, 500]
+
         this.players = {
-            1: { y: 50 },
-            2: { y: 50 }
+            0: { y: this.screenSize[1] / 2 },
+            1: { y: this.screenSize[1] / 2 }
         };
 
-        this.speed = 1;
+        this.playerSpeed = 1;
     }
 
     handleInput(playerId, input) {
@@ -13,15 +15,15 @@ class Game {
         if (!player) return;
 
         if (input === "up") {
-            player.y -= this.speed;
+            player.y -= this.playerSpeed;
         }
 
         if (input === "down") {
-            player.y += this.speed;
+            player.y += this.playerSpeed;
         }
 
         if (player.y < 0) player.y = 0;
-        if (player.y > 100) player.y = 100;
+        if (player.y > 500) player.y = 500;
     }
 
     getState() {
