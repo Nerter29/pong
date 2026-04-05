@@ -1,8 +1,8 @@
 class Game {
     constructor() {
-        this.screenSize = [1000, 500]
+        this.screenSize = [700, 500]
         this.paddleWidth = 20
-        this.paddleHeight = 20
+        this.paddleHeight = 100
         this.startY = this.screenSize[1] / 2
 
         this.players = {

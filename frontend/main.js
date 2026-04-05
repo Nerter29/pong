@@ -11,6 +11,42 @@ var startInfo = null;
 
 var running = false;
 
+const gameCanvas = document.getElementById("game-canvas");
+const ctx = gameCanvas.getContext('2d');
+var canvasSize = [gameCanvas.width, gameCanvas.height];
+
+var paddleList = []
+
+function start(){
+    if(startInfo != null){
+        
+        setUpCanvas(gameCanvas, startInfo.screenWidth, startInfo.screenHeight);
+        canvasSize = [gameCanvas.width, gameCanvas.height];
+        spawnPaddles(paddleList, canvasSize, startInfo)
+    }
+
+    mainLoop();
+}
+
+function mainLoop() {
+
+    ctx.clearRect( 0, 0, canvasSize[0], canvasSize[1]);
+
+    if(gameState != null){
+        for(let i = 0; i < paddleList.length; i++){
+            var paddle = paddleList[i]
+            var playerInfo = gameState.players[i]
+            paddle.move(playerInfo.y)
+            paddle.draw(ctx)
+        }
+    }
+    sendInput()
+    if(running){
+        requestAnimationFrame(mainLoop);
+    }   
+}
+
+
 ws.onmessage = function(event) {
     let message = JSON.parse(event.data);
 
@@ -23,6 +59,7 @@ ws.onmessage = function(event) {
         console.log("game started !");
         startInfo = message.data;
         running = true
+        start();
     }
 
     if (message.type === "state") {
@@ -37,10 +74,12 @@ const keys = {};
 
 document.addEventListener("keydown", (event) => {
     keys[event.key] = true;
+    event.preventDefault();
 });
 
 document.addEventListener("keyup", (event) => {
     keys[event.key] = false;
+    event.preventDefault();
 });
 
 function sendInput(){
@@ -63,45 +102,4 @@ function sendInput(){
     }
 }
 
-//----------------------------game loop----------------------------
 
-const gameCanvas = document.getElementById("game-canvas");
-const ctx = gameCanvas.getContext('2d');
-const canvasSize = [gameCanvas.width, gameCanvas.height];
-
-
-var paddleList = []
-
-
-function mainLoop() {
-
-    ctx.clearRect( 0, 0, canvasSize[0], canvasSize[1]);
-
-    if(gameState != null){
-        
-        for(let i = 0; i < paddleList.length; i++){
-            var paddle = paddleList[i]
-            var playerInfo = gameState.players[i]
-            paddle.move(playerInfo.y)
-            paddle.draw(ctx)
-        }
-    }
-    
-
-    sendInput()
-    if(running){
-        requestAnimationFrame(mainLoop);
-    }   
-    
-}
-
-if(running){
-    if(startInfo != null){
-        
-        setUpCanvas(gameCanvas, startInfo.screenWidth, startInfo.screenHeight);
-        canvasSize = [gameCanvas.width, gameCanvas.height];
-        spawnPaddles(paddleList, canvasSize, startInfo)
-    }
-
-    mainLoop();
-}
