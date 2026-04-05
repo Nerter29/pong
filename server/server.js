@@ -69,7 +69,7 @@ wss.on("connection", function (ws) {
     //----------------------------------------------Connexions-----------------------------------------------
 
 
-    //unconnect the client if the server is full
+    //disconnect the client if the server is full
     if (players.length >= 2) {
         ws.send(JSON.stringify({
             type: "error",
@@ -101,7 +101,7 @@ wss.on("connection", function (ws) {
         }
 
         if (messageParsed.type === "input") {
-            //console.log("input recu : " + messageParsed.input + " de " + messageParsed.playerId)
+            console.log("input recu : " + messageParsed.input + " de " + messageParsed.playerId)
             //handle inputs of clients
             game.handleInput(playerId, messageParsed.input);
 
