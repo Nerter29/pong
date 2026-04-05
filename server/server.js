@@ -16,7 +16,7 @@ const Game = require("./game");
 const game = new Game();
 
 function assignPlayers(ws){
-    // this function assigns ids to the player, add it to the list, and send a code  to the client to tell them.
+    // this function assigns ids to the player, add it to the list, and send a message to the client to tell them.
 
     var playerId;
 

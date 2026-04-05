@@ -3,7 +3,7 @@ class Game {
         this.screenSize = [700, 500]
         this.paddleWidth = 20
         this.paddleHeight = 100
-        this.startY = this.screenSize[1] / 2
+        this.startY = this.screenSize[1] / 2 - this.paddleHeight / 2
 
         this.players = {
             0: { y: this.startY },

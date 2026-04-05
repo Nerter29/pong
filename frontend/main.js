@@ -14,16 +14,23 @@ var running = false;
 const gameCanvas = document.getElementById("game-canvas");
 const ctx = gameCanvas.getContext('2d');
 var canvasSize = [gameCanvas.width, gameCanvas.height];
+var gameScreenSize = null;
+
+//the proportion of the window that is filled by the canvas
+const windowFilling = 0.7
+
 
 var paddleList = []
 
 function start(){
     if(startInfo != null){
         
-        setUpCanvas(gameCanvas, startInfo.screenWidth, startInfo.screenHeight);
+        setUpCanvas(gameCanvas, ctx, startInfo.screenWidth, startInfo.screenHeight, windowFilling);
         canvasSize = [gameCanvas.width, gameCanvas.height];
         paddleList = [];
         spawnPaddles(paddleList, canvasSize, startInfo)
+
+        gameScreenSize = [startInfo.screenWidth, startInfo.screenHeight]
     }
 
     mainLoop();
@@ -31,7 +38,7 @@ function start(){
 
 function mainLoop() {
 
-    ctx.clearRect( 0, 0, canvasSize[0], canvasSize[1]);
+    ctx.clearRect( 0, 0, gameScreenSize[0], gameScreenSize[1]);
 
     if(gameState != null){
         for(let i = 0; i < paddleList.length; i++){
@@ -107,7 +114,6 @@ function sendInput(){
             playerId: playerId,
             input: input
         }));
-        console.log("oe")
     }
 }
 
