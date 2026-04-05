@@ -107,6 +107,7 @@ function sendInput(){
             playerId: playerId,
             input: input
         }));
+        console.log("oe")
     }
 }
 

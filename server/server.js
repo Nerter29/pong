@@ -90,13 +90,13 @@ wss.on("connection", function (ws) {
 
     //----------------------------------------------Messages-----------------------------------------------
 
-    ws.on("code ", function (code ) {
+    ws.on("message", function (message) {
         let messageParsed;
 
         try {
-            messageParsed = JSON.parse(code .toString());
+            messageParsed = JSON.parse(message.toString());
         } catch (e) {
-            console.log("json code bad format")
+            console.log("json message bad format")
             return;
         }
 
