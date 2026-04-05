@@ -15,7 +15,7 @@ class Game {
             screenHeight : this.screenSize[1],
             players : {
                 0 : {startX : 0, startY : this.startY},
-                1 : {startX : screenSize[0] - this.paddleWidth, startY : this.startY}
+                1 : {startX : this.screenSize[0] - this.paddleWidth, startY : this.startY}
             },
             paddleWidth : this.paddleWidth,
             paddleHeight : this.paddleHeight
