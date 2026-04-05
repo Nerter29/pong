@@ -65,8 +65,14 @@ ws.onmessage = function(event) {
 
     if (message.type === "state") {
         gameState = message.data;
-
         //console.log("state received : ", gameState);
+    }
+
+    if (message.type === "error"){
+        if(message.code === 0){
+            console.log("you have been disconnected because the server is full");
+        }
+        
     }
 };
 

@@ -35,11 +35,7 @@ class Game {
             if (input === "down" && player.y + this.paddleHeight < this.screenSize[1]) {
                 player.y += this.playerSpeed;
             }
-
-
         }
-
-        
     }
 
     getState() {

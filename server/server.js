@@ -3,6 +3,9 @@ const WebSocket = require("ws");
 const port = 3001;
 const wss = new WebSocket.Server({ port: port });
 
+const TICK_RATE = 60;
+const TICK_INTERVAL = 1000 / TICK_RATE;
+
 console.log("pong web socket running");
 
 var playerNumber = 2;
@@ -13,7 +16,7 @@ const Game = require("./game");
 const game = new Game();
 
 function assignPlayers(ws){
-    // this function assigns ids to the player, add it to the list, and send a message to the client to tell them.
+    // this function assigns ids to the player, add it to the list, and send a code  to the client to tell them.
 
     var playerId;
 
@@ -53,6 +56,14 @@ function sendData(data, type){
     }
 }
 
+//--------------------------------------------Game-----------------------------------------
+
+
+function gameLoop() {
+    //send the state to every clients
+    sendData(game.getState(), "state")
+}
+
 wss.on("connection", function (ws) {
 
     //----------------------------------------------Connexions-----------------------------------------------
@@ -62,7 +73,7 @@ wss.on("connection", function (ws) {
     if (players.length >= 2) {
         ws.send(JSON.stringify({
             type: "error",
-            message: "server full"
+            code : 0
         }));
         ws.close();
         return;
@@ -72,37 +83,33 @@ wss.on("connection", function (ws) {
 
     //start game if we have 2 players
     if (players.length === 2) {
-
         sendData(game.getStartInfo(), "start");
+        setInterval(gameLoop, TICK_INTERVAL);
     }
 
 
-    //----------------------------------------------Game-----------------------------------------------
+    //----------------------------------------------Messages-----------------------------------------------
 
-
-    ws.on("message", function (message) {
+    ws.on("code ", function (code ) {
         let messageParsed;
 
         try {
-            messageParsed = JSON.parse(message.toString());
+            messageParsed = JSON.parse(code .toString());
         } catch (e) {
-            console.log("json message bad format")
+            console.log("json code bad format")
             return;
         }
 
         if (messageParsed.type === "input") {
-            console.log("input recu : " + messageParsed.input + " de " + messageParsed.playerId)
-
+            //console.log("input recu : " + messageParsed.input + " de " + messageParsed.playerId)
             //handle inputs of clients
             game.handleInput(playerId, messageParsed.input);
 
-            //send the state to every clients
-            sendData(game.getState(), "state")
         }
     });
 
 
-    //----------------------------------------------Unconnexion-----------------------------------------------
+    //----------------------------------------------Disconnexion-----------------------------------------------
     ws.on("close", function () {
 
         // remove player
@@ -114,3 +121,5 @@ wss.on("connection", function (ws) {
         }
     });
 });
+
+
