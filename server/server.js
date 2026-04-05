@@ -44,6 +44,15 @@ function assignPlayers(ws){
 }
 
 
+function sendData(data, name){
+    for (var i = 0; i < players.length; i++) {
+        players[i].socket.send(JSON.stringify({
+            type: name,
+            data: data
+        }));
+    }
+}
+
 wss.on("connection", function (ws) {
 
     //----------------------------------------------Connexions-----------------------------------------------
@@ -63,13 +72,8 @@ wss.on("connection", function (ws) {
 
     //start game if we have 2 players
     if (players.length === 2) {
-        console.log("start of the game");
 
-        for (var i = 0; i < players.length; i++) {
-        players[i].socket.send(JSON.stringify({
-            type: "start"
-        }));
-        }
+        sendData(game.getStartInfo(), "start");
     }
 
 
@@ -90,14 +94,8 @@ wss.on("connection", function (ws) {
             //handle inputs of clients
             game.handleInput(playerId, data.input);
 
-            //send back the state to every clients
-            const state = game.getState();
-            for (var i = 0; i < players.length; i++) {
-                players[i].socket.send(JSON.stringify({
-                    type: "state",
-                    state: state
-                }));
-            }
+            //send the state to every clients
+            sendData(game.getState(), "state")
         }
     });
 

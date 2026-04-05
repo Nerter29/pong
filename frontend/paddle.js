@@ -18,20 +18,11 @@ class Paddle{
     }
 }
 
-export function spawnPaddles(paddleList, canvasSize, startY, paddleWidth, paddleHeight){
+export function spawnPaddles(paddleList, canvasSize, startInfo){
 
     for(let id = 0; id < 2; id++){
-
-        var x = 0;
-
-        if(id == 0){
-            x = 10
-        }
-        else{
-            x = canvasSize[0] - paddleWidth
-        }
-
-        const paddle = new Paddle(x, startY, paddleWidth, paddleHeight)
+        const startPlayerInfo = startInfo.players[id]
+        const paddle = new Paddle(startPlayerInfo.startX, startPlayerInfo.startY, startInfo.paddleWidth, startInfo.paddleHeight)
 
         paddleList.push(paddle)
     }

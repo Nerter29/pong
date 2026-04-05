@@ -1,5 +1,7 @@
+import { stat } from 'node:fs';
 import {setUpCanvas} from './canvas.js';
 import {spawnPaddles}  from './paddle.js';
+import { run } from 'node:test';
 
 
 let ws = new WebSocket("wss://nerter.fr/pong/");
@@ -7,21 +9,26 @@ let ws = new WebSocket("wss://nerter.fr/pong/");
 let playerId = null;
 
 var gameState = null;
+var startInfo = null;
+
+var running = false;
 
 ws.onmessage = function(event) {
-    let data = JSON.parse(event.data);
+    let message = JSON.parse(event.message);
 
-    if (data.type === "assign") {
-        playerId = data.player;
+    if (message.type === "assign") {
+        playerId = message.player;
         console.log("im", playerId);
     }
 
-    if (data.type === "start") {
+    if (message.type === "start") {
         console.log("game started for client !");
+        startInfo = message.data;
+        running = true
     }
 
-    if (data.type === "state") {
-        gameState = data.state
+    if (message.type === "state") {
+        gameState = message.data;
 
         console.log("state received : ", gameState);
     }
@@ -62,17 +69,11 @@ function sendInput(){
 
 const gameCanvas = document.getElementById("game-canvas");
 const ctx = gameCanvas.getContext('2d');
-setUpCanvas(gameCanvas, 500, 500);
 const canvasSize = [gameCanvas.width, gameCanvas.height];
 
 
 var paddleList = []
 
-const paddleWidth = 20
-const paddleHeight = 100
-const startY = 50
-
-spawnPaddles(paddleList, canvasSize, startY, paddleWidth, paddleHeight)
 
 function mainLoop() {
 
@@ -90,7 +91,19 @@ function mainLoop() {
     
 
     sendInput()
-    requestAnimationFrame(mainLoop);
+    if(running){
+        requestAnimationFrame(mainLoop);
+    }   
+    
 }
 
-mainLoop();
+if(running){
+    if(startInfo != null){
+        
+        setUpCanvas(gameCanvas, startInfo.screenWidth, startInfo.screenHeight);
+        canvasSize = [gameCanvas.width, gameCanvas.height];
+        spawnPaddles(paddleList, canvasSize, startInfo)
+    }
+
+    mainLoop();
+}

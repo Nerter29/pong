@@ -1,11 +1,26 @@
 class Game {
     constructor() {
         this.screenSize = [1000, 500]
+        this.paddleWidth = 20
+        this.paddleHeight = 20
+        this.startY = this.screenSize[1] / 2
 
         this.players = {
-            0: { y: this.screenSize[1] / 2 },
-            1: { y: this.screenSize[1] / 2 }
+            0: { y: this.startY },
+            1: { y: this.startY }
         };
+
+        this.startInfo = {
+            screenWidth : this.screenSize[0],
+            screenHeight : this.screenSize[1],
+            players : {
+                0 : {startX : 0, startY : this.startY},
+                1 : {startX : screenSize - this.paddleWidth, startY : this.startY}
+            },
+            paddleWidth : this.paddleWidth,
+            paddleHeight : this.paddleHeight
+            
+        }
 
         this.playerSpeed = 1;
     }
@@ -30,6 +45,10 @@ class Game {
         return {
             players: this.players
         };
+    }
+
+    getStartInfo(){
+        return this.startInfo
     }
 }
 
