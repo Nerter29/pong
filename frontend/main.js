@@ -1,7 +1,5 @@
-import { stat } from 'node:fs';
 import {setUpCanvas} from './canvas.js';
 import {spawnPaddles}  from './paddle.js';
-import { run } from 'node:test';
 
 
 let ws = new WebSocket("wss://nerter.fr/pong/");
