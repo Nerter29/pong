@@ -48,7 +48,7 @@ class Game {
     }
 
     getStartInfo(){
-        return this.startInfo
+        return structuredClone(this.startInfo)
     }
 }
 
