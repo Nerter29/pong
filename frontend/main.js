@@ -1,6 +1,9 @@
 import {setUpCanvas} from './canvas.js';
 import {spawnPaddles}  from './paddle.js';
 
+const TICK_RATE = 60;
+const TICK_INTERVAL = 1000 / TICK_RATE;
+
 
 let ws = new WebSocket("wss://nerter.fr/pong/");
 
@@ -50,7 +53,7 @@ function start(){
         updateInfoBloc();
     }
 
-    mainLoop();
+    setInterval(mainLoop, TICK_INTERVAL);
 }
 
 function mainLoop() {
@@ -66,9 +69,7 @@ function mainLoop() {
         }
     }
     sendInput()
-    if(running){
-        requestAnimationFrame(mainLoop);
-    }   
+
 }
 
 
