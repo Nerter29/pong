@@ -1,0 +1,2 @@
+gestion de rooms
+reset une partie quand 1 player se deco

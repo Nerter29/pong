@@ -1,8 +1,89 @@
+@font-face {/*Titles*/
+    font-family: 'Noto';
+    src: 
+    url('../../../assets/fonts/NotoSansLao.ttf') format('truetype');
+}
+
+@font-face {/*Paragraphs*/
+    font-family: 'K2D';
+    src: 
+    url('../../../assets/fonts/K2D/K2D-Regular.ttf') format('truetype');
+}
+
+:root {
+    --purple-1: #150f15;
+    --purple-2: #1f1320;
+    --purple-3: #331a36;
+    --purple-4: #441d48;
+    --purple-5: #4f2554;
+    --purple-6: #5d3162;
+    --purple-7: #734178;
+    --purple-8: #93549a;
+    --purple-9: #c061cb;
+    --purple-10: #b354be;
+    --purple-11: #e896f1;
+    --purple-12: #f2d5f5;
+}
+
+
+@media (min-width: 1000px){/*horizontal*/
+    .title-bloc{flex-direction: row;}
+
+}
+
+@media (max-width: 1000px){/*vertical*/
+    .title-bloc{flex-direction: column;}
+
+}
+
+body{
+    background-color: var(--purple-1);
+    padding: 0;
+    margin: 0;
+}
 
 
 h1{
     text-align: center;
+    color : var(--purple-12);
+    font-family: Noto;
 }
+p, li{
+    color : var(--purple-12);
+    font-family: K2D;
+}
+ul{
+    margin: 0;
+    padding: 0;
+}
+
+li{
+    list-style-type: none;
+    margin: 0;
+}
+
+.title-bloc{
+    display: flex;
+    
+    align-items: center;
+    justify-content: center;
+
+}
+
+.info-bloc{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    margin : 1em;
+    padding: 0.5em;
+    border: 2px solid var(--purple-11);
+    border-radius: 10px;
+    background-color: var(--purple-2);
+
+}
+
 
 .canvas-bloc{
     width: 100%;
@@ -14,7 +95,8 @@ h1{
 }
 
 #game-canvas{
-    border: 1px solid rgb(151, 151, 151);
-    background-color: #d6d6d6;
+    display: none;
+    border: 2px solid var(--purple-11);
+    background-color: var(--purple-2);
     border-radius: 10px;
 }
