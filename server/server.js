@@ -6,20 +6,49 @@ const wss = new WebSocket.Server({ port: port });
 const TICK_RATE = 60;
 const TICK_INTERVAL = 1000 / TICK_RATE;
 
+const playerPerRoom = 2;
+
 console.log("pong web socket running");
 
 
 const Game = require("./game");
 
-// var players = [];
-// const game = new Game();
+
 var rooms = [];
 
+function getRoomId(){
+    var id = 0
+    var idTaken = false;
+    var idFound = false
+    let i = 0
+    while(i < rooms.length && !idFound){
+        let j = 0
+        idTaken = false;
+        while(j < rooms.length && !idTaken){
+            if(rooms[j].id == i){
+                idTaken = true
+            }
+            j++
+        }
+        if(!idTaken){
+            idFound = true
+            id = i;
+        }
+        i++;
+    }
+    if(!idFound){
+        id = rooms.length;
+    }
+    return id
+}
+
 function createRoom() {
+    //creates a default room that will contain an id, a player list, a game and a loop to run the game 
     return {
+        id : getRoomId(),
         players: [],
         game: new Game(),
-        interval: null
+        loop: null
     };
 }
 
@@ -35,6 +64,7 @@ function findRoom() {
     return newRoom;
 }
 
+
 function sendDataToRoom(room, data, type){
     for (var i = 0; i < room.players.length; i++) {
         room.players[i].socket.send(JSON.stringify({
@@ -44,7 +74,7 @@ function sendDataToRoom(room, data, type){
     }
 }
 
-function getPlayerId(room, ws){
+function getPlayerId(room){
 
     var playerId;
 
@@ -60,14 +90,18 @@ function getPlayerId(room, ws){
         }
     }  
 
-    console.log("player " + playerId + " connected");
-
-    ws.send(JSON.stringify({
-        type: "assign",
-        player: playerId
-    }));
     return playerId
 
+}
+
+
+function sendConnectionPackage(ws, room, playerId){
+    console.log("player " + playerId + " connected in " + room.id);
+    ws.send(JSON.stringify({
+        type: "connected",
+        playerId: playerId,
+        roomId: room.id
+    }));
 }
 
 //--------------------------------------------Game-----------------------------------------
@@ -80,23 +114,14 @@ function gameLoop(room) {
 
 wss.on("connection", function (ws) {
 
-    //----------------------------------------------Connexions-----------------------------------------------
+    //----------------------------------------------Connections-----------------------------------------------
 
 
-    //disconnect the client if the server is full
-    // if (players.length >= 2) {
-    //     ws.send(JSON.stringify({
-    //         type: "error",
-    //         code : 0
-    //     }));
-    //     ws.close();
-    //     return;
-    // }
-
-    //var playerId = assignPlayers(ws)
     var room = findRoom();
 
     var playerId = getPlayerId(room, ws);
+
+    sendConnectionPackage(ws, room, playerId);
 
     room.players.push({
         id: playerId,
@@ -110,7 +135,7 @@ wss.on("connection", function (ws) {
     if (room.players.length === 2) {
         sendDataToRoom(room, room.game.getStartInfo(), "start");
 
-        room.interval = setInterval(function () {
+        room.loop = setInterval(function () {
         gameLoop(room);
         }, TICK_INTERVAL);
     }
@@ -153,7 +178,7 @@ wss.on("connection", function (ws) {
 
         //remove room if it is empty
         if (room.players.length === 0) {
-            clearInterval(room.interval);
+            clearInterval(room.loop);
 
             var index = rooms.indexOf(room);
             if (index !== -1) {

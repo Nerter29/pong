@@ -76,8 +76,9 @@ function mainLoop() {
 ws.onmessage = function(event) {
     let message = JSON.parse(event.data);
 
-    if (message.type === "assign") {
-        playerId = message.player;
+    if (message.type === "connected") {
+        playerId = message.playerId;
+        roomId = message.roomId
         console.log("im", playerId);
     }
 
