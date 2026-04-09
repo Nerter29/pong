@@ -23,7 +23,21 @@
     --purple-10: #b354be;
     --purple-11: #e896f1;
     --purple-12: #f2d5f5;
+
+    --blue-1: #0d1117;
+    --blue-2: #141920;
+    --blue-3: #1b2739;
+    --blue-4: #1f324d;
+    --blue-5: #293e5d;
+    --blue-6: #354c6e;
+    --blue-7: #435e83;
+    --blue-8: #5373a0;
+    --blue-9: #6793d1;
+    --blue-10: #5b87c4;
+    --blue-11: #94b9ec;
+    --blue-12: #d1e2fa;
 }
+
 
 
 @media (min-width: 1000px){/*horizontal*/

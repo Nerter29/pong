@@ -7,6 +7,7 @@ class Game {
         this.paddleWidth = 20
         this.paddleHeight = 100
         this.paddleStartY = this.screenSize[1] / 2 - this.paddleHeight / 2
+        this.paddleSpeed = 5;
         this.xSpacing = 10
 
         this.players = {
@@ -15,7 +16,6 @@ class Game {
         };
 
         this.ballRadius = 4;
-
         this.ballStartX = this.screenSize[0] / 2 - this.ballRadius
         this.ballStartY = this.screenSize[1] / 2 - this.ballRadius
         this.ballSpeed = 6;
@@ -37,18 +37,17 @@ class Game {
             
         }
 
-        this.playerSpeed = 3;
     }
 
     handleInput(playerId, input) {
         let player = this.players[playerId];
         if (player){
             if (input === "up" && player.y > 0) {
-                player.y -= this.playerSpeed;
+                player.y -= this.paddleSpeed;
             }
 
             if (input === "down" && player.y + this.paddleHeight < this.screenSize[1]) {
-                player.y += this.playerSpeed;
+                player.y += this.paddleSpeed;
             }
         }
     }

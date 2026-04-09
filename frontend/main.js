@@ -27,7 +27,7 @@ var gameScreenSize = null;
 //the proportion of the window that is filled by the canvas
 const windowFilling = 0.8
 
-const paddleColor = "#93549a";
+const paddleColor = "#94b9ec";
 const ballColor = "#e896f1";
 
 
