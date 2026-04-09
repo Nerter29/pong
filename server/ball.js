@@ -19,8 +19,8 @@ class Ball{
     }
 
     move(deltaTime){
-        var potentialX = this.x + (this.dirX * this.speed) * deltaTime;
-        var potentialY = this.y + (this.dirY * this.speed) * deltaTime;
+        var potentialX = this.x + (this.dirX * this.speed);
+        var potentialY = this.y + (this.dirY * this.speed);
 
         if(potentialX + this.radius * 2 > this.screenSize[0] || potentialX < 0){
             this.dirX *= -1;

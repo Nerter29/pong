@@ -14,7 +14,7 @@ class Game {
             1: { y: this.paddleStartY }
         };
 
-        this.ball = new Ball(this.screenSize, 10)
+        this.ball = new Ball(this.screenSize, 10, 1)
 
         this.startInfo = {
             screenWidth : this.screenSize[0],
@@ -35,11 +35,11 @@ class Game {
         let player = this.players[playerId];
         if (player){
             if (input === "up" && player.y > 0) {
-                player.y -= this.playerSpeed * deltaTime;
+                player.y -= this.playerSpeed;
             }
 
             if (input === "down" && player.y + this.paddleHeight < this.screenSize[1]) {
-                player.y += this.playerSpeed * deltaTime;
+                player.y += this.playerSpeed;
             }
         }
     }
