@@ -78,8 +78,9 @@ ws.onmessage = function(event) {
 
     if (message.type === "connected") {
         playerId = message.playerId;
-        roomId = message.roomId
-        console.log("im", playerId);
+        roomId = message.roomId;
+        console.log("im " + playerId + " in room " + roomId);
+        updateInfoBloc();
     }
 
     if (message.type === "start") {
@@ -102,6 +103,18 @@ ws.onmessage = function(event) {
 
         }
         
+    }
+
+    if (message.type === "reconnect"){
+        console.log("you have been disconnected because the other player left");
+        ws.close();
+        status = "L'adversaire s'est deconnecté";
+        updateInfoBloc()
+
+        setTimeout(function () {
+            location.reload(); //refresh page
+        }, 500);
+
     }
 };
 

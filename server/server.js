@@ -168,6 +168,10 @@ wss.on("connection", function (ws) {
     ws.on("close", function () {
         var room = ws.room;
 
+        if (!room) return;
+
+        console.log("player disconnected");
+
         // remove player
         for (var i = 0; i < room.players.length; i++) {
             if (room.players[i].socket === ws) {
@@ -176,15 +180,35 @@ wss.on("connection", function (ws) {
             }
         }
 
-        //remove room if it is empty
-        if (room.players.length === 0) {
-            clearInterval(room.loop);
+        //when someone disconnect, the entire room is deleted.
 
-            var index = rooms.indexOf(room);
-            if (index !== -1) {
-                rooms.splice(index, 1);
+        //we stop the loop
+        if (room.interval) {
+            clearInterval(room.interval);
+        }
+
+        //we look for the openent
+        var openent = null;
+
+        for (var i = 0; i < room.players.length; i++) {
+            if (room.players[i].socket !== ws) {
+                openent = room.players[i].socket;
             }
         }
+
+        //we clear players
+        room.players = []
+        //we remove the room
+        var index = rooms.indexOf(room);
+        if (index !== -1) {
+            rooms.splice(index, 1);
+        }
+
+        //we say to the openent to reconnect and we diconnect him
+        openent.send(JSON.stringify({
+            type: "reconnect"
+        }));
+        openent.close();
     });
 });
 
