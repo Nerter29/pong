@@ -1,7 +1,7 @@
 import {lerp}  from './utils.js';
 
 
-class Ball{
+export class Ball{
     constructor(x, y, radius, color){
         this.x = x;
         this.y = y;
