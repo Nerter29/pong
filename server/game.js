@@ -18,7 +18,7 @@ class Game {
 
         this.ballStartX = this.screenSize[0] / 2 - this.ballRadius
         this.ballStartY = this.screenSize[1] / 2 - this.ballRadius
-        this.ballSpeed = 10;
+        this.ballSpeed = 6;
         this.ball = new Ball(this.screenSize, this.ballStartX, this.ballStartY, this.ballRadius, this.ballSpeed)
 
         this.startInfo = {
