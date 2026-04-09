@@ -76,7 +76,6 @@ function mainLoop() {
         }
         ball.move(gameState.ball.x, gameState.ball.y);
         ball.draw(ctx)
-        console.log(ball.x, ball.y)
     }
     sendInput()
 

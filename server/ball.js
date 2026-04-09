@@ -22,13 +22,13 @@ class Ball{
         var potentialX = this.x + (this.dirX * this.speed);
         var potentialY = this.y + (this.dirY * this.speed);
 
-        if(potentialX + this.radius * 2 > this.screenSize[0] || potentialX < 0){
+        if(potentialX + this.radius > this.screenSize[0] || potentialX < this.radius){
             this.dirX *= -1;
         }
         else{
             this.x = potentialX;
         }
-        if(potentialY + this.radius * 2 > this.screenSize[1] || potentialY < 0){
+        if(potentialY + this.radius > this.screenSize[1] || potentialY < this.radius){
             this.dirY *= -1;
         }
         else{
