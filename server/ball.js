@@ -1,13 +1,13 @@
 
 
 class Ball{
-    constructor(screenSize, radius, speed){
+    constructor(screenSize, startX, startY, radius, speed){
 
         this.radius = radius
         this.screenSize = screenSize;
 
-        this.x = screenSize[0] / 2 - radius;
-        this.y = screenSize[1] / 2 - radius;
+        this.x = startX;
+        this.y = startY;
 
         this.speed = speed;
 
@@ -18,7 +18,7 @@ class Ball{
 
     }
 
-    move(deltaTime){
+    move(){
         var potentialX = this.x + (this.dirX * this.speed);
         var potentialY = this.y + (this.dirY * this.speed);
 

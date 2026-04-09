@@ -1,5 +1,7 @@
 import {setUpCanvas} from './canvas.js';
 import {spawnPaddles}  from './paddle.js';
+import {Ball}  from './ball.js';
+
 
 const TICK_RATE = 60;
 const TICK_INTERVAL = 1000 / TICK_RATE;
@@ -26,9 +28,12 @@ var gameScreenSize = null;
 const windowFilling = 0.8
 
 const paddleColor = "#93549a";
+const ballColor = "#e896f1";
+
 
 
 var paddleList = []
+var ball;
 
 function updateInfoBloc(){
     document.getElementById("playerId").innerHTML = `<strong>Identifiant de joueur :</strong> ${playerId}`;
@@ -45,6 +50,8 @@ function start(){
         canvasSize = [gameCanvas.width, gameCanvas.height];
         paddleList = [];
         spawnPaddles(paddleList, canvasSize, startInfo, paddleColor)
+        
+        ball = new Ball(startInfo.ballStartX, startInfo.ballStartY, startInfo.ballRadius, ballColor)
 
         gameScreenSize = [startInfo.screenWidth, startInfo.screenHeight]
 
@@ -67,6 +74,8 @@ function mainLoop() {
             paddle.move(playerInfo.y)
             paddle.draw(ctx)
         }
+        ball.move(gameState.ball.x, gameState.ball.y);
+        ball.draw(ctx)
     }
     sendInput()
 

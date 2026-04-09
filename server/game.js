@@ -14,7 +14,11 @@ class Game {
             1: { y: this.paddleStartY }
         };
 
-        this.ball = new Ball(this.screenSize, 10, 1)
+        this.ballStartX = screenSize[0] / 2 - radius
+        this.ballStartY = screenSize[1] / 2 - radius
+        this.ballRadius = 10;
+        this.ballSpeed = 1;
+        this.ball = new Ball(this.screenSize, this.ballStartX, this.ballStartY, this.ballRadius, this.ballSpeed)
 
         this.startInfo = {
             screenWidth : this.screenSize[0],
@@ -24,14 +28,18 @@ class Game {
                 1 : {startX : this.screenSize[0] - this.paddleWidth - this.xSpacing, paddleStartY : this.paddleStartY}
             },
             paddleWidth : this.paddleWidth,
-            paddleHeight : this.paddleHeight
+            paddleHeight : this.paddleHeight,
+
+            ballStartX : this.ballStartX,
+            ballStartY : this.ballStartY,
+            barrRadius : this.ballRadius
             
         }
 
         this.playerSpeed = 3;
     }
 
-    handleInput(playerId, input, deltaTime) {
+    handleInput(playerId, input) {
         let player = this.players[playerId];
         if (player){
             if (input === "up" && player.y > 0) {
