@@ -14,11 +14,11 @@ class Game {
             1: { y: this.paddleStartY }
         };
 
-        this.ballRadius = 10;
+        this.ballRadius = 4;
 
         this.ballStartX = this.screenSize[0] / 2 - this.ballRadius
         this.ballStartY = this.screenSize[1] / 2 - this.ballRadius
-        this.ballSpeed = 1;
+        this.ballSpeed = 10;
         this.ball = new Ball(this.screenSize, this.ballStartX, this.ballStartY, this.ballRadius, this.ballSpeed)
 
         this.startInfo = {
