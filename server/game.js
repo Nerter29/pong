@@ -1,22 +1,27 @@
+const Ball = require("./ball");
+
+
 class Game {
     constructor() {
         this.screenSize = [700, 500]
         this.paddleWidth = 20
         this.paddleHeight = 100
-        this.startY = this.screenSize[1] / 2 - this.paddleHeight / 2
+        this.paddleStartY = this.screenSize[1] / 2 - this.paddleHeight / 2
         this.xSpacing = 10
 
         this.players = {
-            0: { y: this.startY },
-            1: { y: this.startY }
+            0: { y: this.paddleStartY },
+            1: { y: this.paddleStartY }
         };
+
+        this.ball = new Ball(this.screenSize, 10)
 
         this.startInfo = {
             screenWidth : this.screenSize[0],
             screenHeight : this.screenSize[1],
             players : {
-                0 : {startX : this.xSpacing, startY : this.startY},
-                1 : {startX : this.screenSize[0] - this.paddleWidth - this.xSpacing, startY : this.startY}
+                0 : {startX : this.xSpacing, paddleStartY : this.paddleStartY},
+                1 : {startX : this.screenSize[0] - this.paddleWidth - this.xSpacing, paddleStartY : this.paddleStartY}
             },
             paddleWidth : this.paddleWidth,
             paddleHeight : this.paddleHeight
@@ -26,22 +31,23 @@ class Game {
         this.playerSpeed = 3;
     }
 
-    handleInput(playerId, input) {
+    handleInput(playerId, input, deltaTime) {
         let player = this.players[playerId];
         if (player){
             if (input === "up" && player.y > 0) {
-                player.y -= this.playerSpeed;
+                player.y -= this.playerSpeed * deltaTime;
             }
 
             if (input === "down" && player.y + this.paddleHeight < this.screenSize[1]) {
-                player.y += this.playerSpeed;
+                player.y += this.playerSpeed * deltaTime;
             }
         }
     }
 
     getState() {
         return {
-            players: this.players
+            players: this.players,
+            ball: this.ball.getPos()
         };
     }
 

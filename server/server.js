@@ -10,9 +10,11 @@ const playerPerRoom = 2;
 
 console.log("pong web socket running");
 
-
 const Game = require("./game");
 
+var currentTime = Date.now();
+var deltaTime;
+var lastTime;
 
 var rooms = [];
 
@@ -55,7 +57,7 @@ function createRoom() {
 function findRoom() {
 
     for (var i = 0; i < rooms.length; i++) {
-        if (rooms[i].players.length < 2) {
+        if (rooms[i].players.length < playerPerRoom) {
             return rooms[i];
         }
     }
@@ -108,6 +110,12 @@ function sendConnectionPackage(ws, room, playerId){
 
 
 function gameLoop(room) {
+    currentTime = Date.now();
+    deltaTime = (currentTime - lastTime) / 1000
+    lastTime = currentTime;
+
+    room.game.ball.move(deltaTime)
+    
     //send the state to every clients
     sendDataToRoom(room, room.game.getState(), "state")
 }
@@ -158,7 +166,7 @@ wss.on("connection", function (ws) {
             var room = ws.room;
             //onsole.log("input recu : " + messageParsed.input + " de " + messageParsed.playerId)
             //handle inputs of clients
-            room.game.handleInput(ws.playerId, messageParsed.input);
+            room.game.handleInput(ws.playerId, messageParsed.input, deltaTime);
 
         }
     });
