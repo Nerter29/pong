@@ -33,7 +33,7 @@ class Game {
 
             ballStartX : this.ballStartX,
             ballStartY : this.ballStartY,
-            barrRadius : this.ballRadius
+            ballRadius : this.ballRadius
             
         }
 

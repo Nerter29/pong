@@ -76,6 +76,7 @@ function mainLoop() {
         }
         ball.move(gameState.ball.x, gameState.ball.y);
         ball.draw(ctx)
+        console.log(ball.x, ball.y)
     }
     sendInput()
 
@@ -101,7 +102,7 @@ ws.onmessage = function(event) {
 
     if (message.type === "state") {
         gameState = message.data;
-        console.log("state received : ", gameState);
+        //console.log("state received : ", gameState);
     }
 
     if (message.type === "error"){
