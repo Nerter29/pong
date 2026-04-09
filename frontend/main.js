@@ -113,7 +113,7 @@ ws.onmessage = function(event) {
 
         setTimeout(function () {
             location.reload(); //refresh page
-        }, 500);
+        }, 2000);
 
     }
 };

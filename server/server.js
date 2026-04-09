@@ -187,12 +187,12 @@ wss.on("connection", function (ws) {
             clearInterval(room.interval);
         }
 
-        //we look for the openent
-        var openent = null;
+        //we look for the oppenent
+        var oppenent = null;
 
         for (var i = 0; i < room.players.length; i++) {
             if (room.players[i].socket !== ws) {
-                openent = room.players[i].socket;
+                oppenent = room.players[i].socket;
             }
         }
 
@@ -204,11 +204,13 @@ wss.on("connection", function (ws) {
             rooms.splice(index, 1);
         }
 
-        //we say to the openent to reconnect and we diconnect him
-        openent.send(JSON.stringify({
-            type: "reconnect"
-        }));
-        openent.close();
+        //we say to the oppenent to reconnect and we diconnect him
+        if(oppenent != null){
+            oppenent.send(JSON.stringify({
+                type: "reconnect"
+            }));
+            oppenent.close();
+        }
     });
 });
 
