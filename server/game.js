@@ -6,10 +6,10 @@ class Game {
     constructor() {
         this.screenSize = [850, 500]
 
-        this.paddleWidth = 10
-        this.paddleHeight = 60
+        this.paddleWidth = 12
+        this.paddleHeight = 64
         this.paddleStartY = this.screenSize[1] / 2 - this.paddleHeight / 2
-        this.paddleSpeed = 5;
+        this.paddleSpeed = 4;
         this.paddleXSpacing = 10
 
         this.paddles = [
@@ -23,10 +23,10 @@ class Game {
             1: {y : this.startY}
         };
 
-        this.ballRadius = 2;
+        this.ballRadius = 3;
         this.ballStartX = this.screenSize[0] / 2 - this.ballRadius
         this.ballStartY = this.screenSize[1] / 2 - this.ballRadius
-        this.ballSpeed = 6;
+        this.ballSpeed = 5;
         this.ballStartAngle = Math.PI / 4;
         this.ball = new Ball(this.screenSize, this.ballStartX, this.ballStartY, this.ballRadius, this.ballSpeed, this.ballStartAngle)
 
