@@ -18,7 +18,7 @@ class Paddle{
             this.y -= this.speed;
         }
 
-        if (input === "down" && this.y + this.hieght < this.screenSize[1]) {
+        if (input === "down" && this.y + this.height < this.screenSize[1]) {
             this.y += this.speed;
         }
     }
