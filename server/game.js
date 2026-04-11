@@ -1,18 +1,26 @@
 const Ball = require("./ball");
+const Paddle = require("./paddle");
 
 
 class Game {
     constructor() {
         this.screenSize = [700, 500]
+
         this.paddleWidth = 20
         this.paddleHeight = 100
         this.paddleStartY = this.screenSize[1] / 2 - this.paddleHeight / 2
         this.paddleSpeed = 5;
-        this.xSpacing = 10
+        this.paddleXSpacing = 10
 
-        this.players = {
-            0: { y: this.paddleStartY },
-            1: { y: this.paddleStartY }
+        this.paddles = {
+            0: new Paddle(this.screenSize, this.paddleXSpacing, this.paddleStartY, this.paddleWidth,
+            this.paddleHeight, this.paddleSpeed),
+            1: new Paddle(this.screenSize, this.screenSize[0] - this.paddleWidth - this.paddleXSpacing,
+            this.paddleStartY, this.paddleWidth, this.paddleHeight, this.paddleSpeed)
+        };
+        this.paddlesY = {
+            0: {y : startY},
+            1: {y : startY}
         };
 
         this.ballRadius = 4;
@@ -24,9 +32,9 @@ class Game {
         this.startInfo = {
             screenWidth : this.screenSize[0],
             screenHeight : this.screenSize[1],
-            players : {
-                0 : {startX : this.xSpacing, paddleStartY : this.paddleStartY},
-                1 : {startX : this.screenSize[0] - this.paddleWidth - this.xSpacing, paddleStartY : this.paddleStartY}
+            paddles : {
+                0 : {startX : this.paddleXSpacing, startY : this.paddleStartY},
+                1 : {startX : this.screenSize[0] - this.paddleWidth - this.paddleXSpacing, startY : this.paddleStartY}
             },
             paddleWidth : this.paddleWidth,
             paddleHeight : this.paddleHeight,
@@ -40,21 +48,20 @@ class Game {
     }
 
     handleInput(playerId, input) {
-        let player = this.players[playerId];
-        if (player){
-            if (input === "up" && player.y > 0) {
-                player.y -= this.paddleSpeed;
-            }
-
-            if (input === "down" && player.y + this.paddleHeight < this.screenSize[1]) {
-                player.y += this.paddleSpeed;
-            }
+        let paddle = this.paddles[playerId];
+        if (paddle){
+            paddle.move(input)
         }
     }
 
     getState() {
+        
+        for(let i = 0; i < this.paddles.length; i++){
+            this.paddlesY[i].y = this.paddles[i].getY();
+        }
+        
         return {
-            players: this.players,
+            paddles: this.paddlesY,
             ball: this.ball.getPos()
         };
     }
