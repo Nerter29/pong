@@ -37,23 +37,31 @@ class Ball{
     }
 
     collideWithPaddles(paddles){
+        //this function handles the collisions between the ball and the paddles so it bounce in a certain direction :
+        //the ball will bounce based on the distance with the center of the paddle, if it bounce on the top, it will
+        //bounce with a high angle, if it bounce at the center, the ball will bounce horizontally
         for(let i = 0; i < paddles.length; i++){
             var paddle = paddles[i];
 
+            
             if((this.x > paddle.x && this.x < paddle.x + paddle.width) && 
             (this.y > paddle.y && this.y < paddle.y + paddle.height)){
-                var maxAngle = (Math.PI / 3); // we can go from -pi/3 to pi/3 (we will add it of pi at the end, to reverse the bounce)
+
+                //we determine the direction : if we check the right or left player, we set a different direction to the bounce
+                var direction = 1;
+                if(i == 1){
+                    direction = -1
+                }
+                var maxAngle = (Math.PI / 3); // we can go from -pi/3 to pi/3 
 
                 var paddleCenterY = paddle.y + (paddle.height / 2);
 
                 var centerDistance = paddleCenterY - this.y; // ball x is already centered, but not the paddle
                 var normalizedCenterDistance = centerDistance / (paddle.height / 2);
 
-                // if i == 0, we bounce to the right (left paddle), 
-                // if i == 1, we sub to Math.PI so it bounce to the right (left paddle)
-                var bounceAngle = (Math.PI * i) - (normalizedCenterDistance * maxAngle); 
+                var bounceAngle = (normalizedCenterDistance * maxAngle);
                 //we reverse the vector and give it to the ball
-                this.dirX = (Math.cos(bounceAngle));
+                this.dirX = direction * (Math.cos(bounceAngle));
                 this.dirY =(-Math.sin(bounceAngle));
             }
         }
