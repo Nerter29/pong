@@ -44,8 +44,8 @@ class Ball{
             var paddle = paddles[i];
 
             
-            if((this.x > paddle.x && this.x < paddle.x + paddle.width) && 
-            (this.y > paddle.y && this.y < paddle.y + paddle.height)){
+            if((this.x + this.radius > paddle.x && this.x - this.radius < paddle.x + paddle.width) && 
+            (this.y + this.radius > paddle.y && this.y  - this.radius< paddle.y + paddle.height)){
 
                 //we determine the direction : if we check the right or left player, we set a different direction to the bounce
                 var direction = 1;
