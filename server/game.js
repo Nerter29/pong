@@ -56,7 +56,7 @@ class Game {
 
     getState() {
         
-        for(let i = 0; i < 2; i++){
+        for(let i = 0; i < this.paddles.length; i++){
             this.paddlesY[i].y = this.paddles[i].getY();
         }
         
@@ -64,6 +64,10 @@ class Game {
             paddles: this.paddlesY,
             ball: this.ball.getPos()
         };
+    }
+
+    getPaddles(){
+        return this.paddles;
     }
 
     getStartInfo(){

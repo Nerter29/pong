@@ -23,6 +23,7 @@ class Paddle{
         }
     }
 
+
     getY() {
         return this.y;
     }

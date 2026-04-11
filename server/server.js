@@ -111,7 +111,7 @@ function gameLoop(room) {
 
 
     room.game.ball.move()
-    
+    room.game.ball.collideWithPaddles(room.game.getPaddles());
     //send the state to every clients
     sendDataToRoom(room, room.game.getState(), "state")
 }
