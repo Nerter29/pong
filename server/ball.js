@@ -50,8 +50,8 @@ class Ball{
                 var normalizedCenterDistance = centerDistance / (paddle.height / 2);
 
                 // if i == 0, we bounce to the right (left paddle), 
-                // if i == 1, we add Math.PI so it bounce to the right (left paddle)
-                var bounceAngle = normalizedCenterDistance * maxAngle + (Math.PI * i); 
+                // if i == 1, we sub to Math.PI so it bounce to the right (left paddle)
+                var bounceAngle = (Math.PI * i) - (normalizedCenterDistance * maxAngle); 
                 //we reverse the vector and give it to the ball
                 this.dirX = (Math.cos(bounceAngle));
                 this.dirY =(-Math.sin(bounceAngle));
