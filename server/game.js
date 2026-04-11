@@ -12,12 +12,12 @@ class Game {
         this.paddleSpeed = 5;
         this.paddleXSpacing = 10
 
-        this.paddles = {
-            0: new Paddle(this.screenSize, this.paddleXSpacing, this.paddleStartY, this.paddleWidth,
+        this.paddles = [
+            new Paddle(this.screenSize, this.paddleXSpacing, this.paddleStartY, this.paddleWidth,
             this.paddleHeight, this.paddleSpeed),
-            1: new Paddle(this.screenSize, this.screenSize[0] - this.paddleWidth - this.paddleXSpacing,
+            new Paddle(this.screenSize, this.screenSize[0] - this.paddleWidth - this.paddleXSpacing,
             this.paddleStartY, this.paddleWidth, this.paddleHeight, this.paddleSpeed)
-        };
+            ];
         this.paddlesY = {
             0: {y : this.startY},
             1: {y : this.startY}
