@@ -1,7 +1,7 @@
 
 
 class Ball{
-    constructor(screenSize, startX, startY, radius, speed){
+    constructor(screenSize, startX, startY, radius, speed, startAngle){
 
         this.radius = radius
         this.screenSize = screenSize;
@@ -12,7 +12,7 @@ class Ball{
         this.speed = speed;
 
         //same angle with random start direction
-        var angle = (Math.PI / 3) * (Math.random() < 0.5 ? -1 : 1);
+        var angle = (startAngle) * (Math.random() < 0.5 ? -1 : 1);
         this.dirX = Math.cos(angle);
         this.dirY = Math.sin(angle);
 
