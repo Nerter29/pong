@@ -19,8 +19,8 @@ class Game {
             this.paddleStartY, this.paddleWidth, this.paddleHeight, this.paddleSpeed)
         };
         this.paddlesY = {
-            0: {y : startY},
-            1: {y : startY}
+            0: {y : this.startY},
+            1: {y : this.startY}
         };
 
         this.ballRadius = 4;
