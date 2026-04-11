@@ -46,7 +46,7 @@ class Ball{
 
                 var paddleCenterX = paddle.x + (paddle.width / 2);
 
-                var ballCenterX = this.x + (this.width / 2);
+                var ballCenterX = this.x + (this.radius / 2);
                 var centerDistance = paddleCenterX - ballCenterX;
                 var normalizedCenterDistance = centerDistance / (paddle.width / 2);
 
