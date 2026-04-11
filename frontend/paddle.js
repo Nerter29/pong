@@ -25,7 +25,7 @@ class Paddle{
 export function spawnPaddles(paddleList, canvasSize, startInfo, paddleColor){
 
     for(let id = 0; id < 2; id++){
-        const startPlayerInfo = startInfo.players[id]
+        const startPlayerInfo = startInfo.paddles[id]
         const paddle = new Paddle(startPlayerInfo.startX, startPlayerInfo.startY, startInfo.paddleWidth, startInfo.paddleHeight, paddleColor)
 
         paddleList.push(paddle)

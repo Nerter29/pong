@@ -56,7 +56,7 @@ class Game {
 
     getState() {
         
-        for(let i = 0; i < this.paddles.length; i++){
+        for(let i = 0; i < 2; i++){
             this.paddlesY[i].y = this.paddles[i].getY();
         }
         
