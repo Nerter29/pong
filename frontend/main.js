@@ -71,6 +71,7 @@ function mainLoop() {
         for(let i = 0; i < paddleList.length; i++){
             var paddle = paddleList[i]
             var playerInfo = gameState.paddles[i]
+            console.log(gameState.ball)
             paddle.move(playerInfo.y)
             paddle.draw(ctx)
         }

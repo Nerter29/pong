@@ -67,7 +67,10 @@ class Ball{
     getPos() {
         return {
             x: this.x,
-            y: this.y
+            y: this.y,
+            dirX: this.dirX,
+            dirY: this.dirY,
+
         };
     }
 }
