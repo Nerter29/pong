@@ -47,7 +47,7 @@ class Ball{
                 var playerCenterX = paddle.x + (paddle.width / 2);
 
                 var ballCenterX = this.x + (this.width / 2);
-
+                console.log(paddle.x)
                 var centerDistance = playerCenterX - ballCenterX;
                 var normalizedCenterDistance = centerDistance / (paddle.width / 2);
 
