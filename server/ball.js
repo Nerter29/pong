@@ -44,16 +44,14 @@ class Ball{
             (this.y > paddle.y && this.y < paddle.y + paddle.height)){
                 var maxAngle = (Math.PI / 3); // we can go from -pi/3 to pi/3 (we will add it of pi at the end, to reverse the bounce)
 
-                var paddleCenterX = paddle.x + (paddle.width / 2);
+                var paddleCenterY = paddle.y + (paddle.height / 2);
 
-                var ballCenterX = this.x + (this.radius / 2);
-                var centerDistance = paddleCenterX - ballCenterX;
-                var normalizedCenterDistance = centerDistance / (paddle.width / 2);
+                var centerDistance = paddleCenterY - this.y; // ball x is already centered, but not the paddle
+                var normalizedCenterDistance = centerDistance / (paddle.height / 2);
 
                 // if i == 0, we bounce to the right (left paddle), 
                 // if i == 1, we add Math.PI so it bounce to the right (left paddle)
                 var bounceAngle = normalizedCenterDistance * maxAngle + (Math.PI * i); 
-                console.log(paddleCenterX, ballCenterX, centerDistance, normalizedCenterDistance, bounceAngle)
                 //we reverse the vector and give it to the ball
                 this.dirX = (Math.cos(bounceAngle));
                 this.dirY =(-Math.sin(bounceAngle));
@@ -67,9 +65,6 @@ class Ball{
         return {
             x: this.x,
             y: this.y,
-            dirX: this.dirX,
-            dirY: this.dirY,
-
         };
     }
 }
