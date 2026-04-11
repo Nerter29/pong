@@ -30,6 +30,8 @@ const windowFilling = 0.8
 const paddleColor = "#94b9ec";
 const ballColor = "#e896f1";
 
+const paddleBorderRadius = 2;
+
 
 
 var paddleList = []
@@ -49,7 +51,7 @@ function start(){
         setUpCanvas(gameCanvas, ctx, startInfo.screenWidth, startInfo.screenHeight, windowFilling);
         canvasSize = [gameCanvas.width, gameCanvas.height];
         paddleList = [];
-        spawnPaddles(paddleList, canvasSize, startInfo, paddleColor)
+        spawnPaddles(paddleList, canvasSize, startInfo, paddleColor, paddleBorderRadius)
         
         ball = new Ball(startInfo.ballStartX, startInfo.ballStartY, startInfo.ballRadius, ballColor)
 

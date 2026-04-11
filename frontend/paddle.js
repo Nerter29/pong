@@ -2,18 +2,20 @@ import {lerp}  from './utils.js';
 
 
 class Paddle{
-    constructor(x, y, width, height, color){
+    constructor(x, y, width, height, color, borderRadius){
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height
         this.color = color
+        this.borderRadius = borderRadius
 
     }
     draw(ctx){
-        //ctx.beginPath();
+        ctx.beginPath();
+        ctx.roundRect(this.x, this.y, this.width, this.height, this.borderRadius);
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.fill();
         
     }
     
@@ -22,11 +24,11 @@ class Paddle{
     }
 }
 
-export function spawnPaddles(paddleList, canvasSize, startInfo, paddleColor){
+export function spawnPaddles(paddleList, canvasSize, startInfo, paddleColor, paddleBorderRadius){
 
     for(let id = 0; id < 2; id++){
         const startPlayerInfo = startInfo.paddles[id]
-        const paddle = new Paddle(startPlayerInfo.startX, startPlayerInfo.startY, startInfo.paddleWidth, startInfo.paddleHeight, paddleColor)
+        const paddle = new Paddle(startPlayerInfo.startX, startPlayerInfo.startY, startInfo.paddleWidth, startInfo.paddleHeight, paddleColor, paddleBorderRadius)
 
         paddleList.push(paddle)
     }
