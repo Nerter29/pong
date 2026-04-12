@@ -22,13 +22,23 @@ class Game {
             0: {y : this.startY},
             1: {y : this.startY}
         };
+        this.scores = {
+            0 : 0,
+            1 : 0
+        }
 
         this.ballRadius = 3;
-        this.ballStartX = this.screenSize[0] / 2 - this.ballRadius
-        this.ballStartY = this.screenSize[1] / 2 - this.ballRadius
-        this.ballSpeed = 5.5;
+        this.ballStartX = this.screenSize[0] / 2 
+        this.ballStartY = this.screenSize[1] / 2
+        this.ballSpeed = 4.5;
+        this.ballStartSpeed = 2.25;
         this.ballStartAngle = Math.PI / 4;
-        this.ball = new Ball(this.screenSize, this.ballStartX, this.ballStartY, this.ballRadius, this.ballSpeed, this.ballStartAngle)
+        this.ball = null
+        this.spawnBall();
+
+        this.startCountdown = 3000;
+        this.countdownTimer = 0;
+        this.startIn = this.startCountdown / 1000
 
         this.startInfo = {
             screenWidth : this.screenSize[0],
@@ -42,10 +52,14 @@ class Game {
 
             ballStartX : this.ballStartX,
             ballStartY : this.ballStartY,
-            ballRadius : this.ballRadius
+            ballRadius : this.ballRadius,
             
         }
 
+    }
+
+    spawnBall(){
+        this.ball = new Ball(this.screenSize, this.ballStartX, this.ballStartY, this.ballRadius, this.ballSpeed, this.ballStartAngle, this.ballStartSpeed)
     }
 
     handleInput(playerId, input) {
@@ -53,6 +67,24 @@ class Game {
         if (paddle){
             paddle.move(input)
         }
+    }
+
+    detectPoints(){
+        var ballX = this.ball.getPos().x;
+        var hasToReplay = false;
+        if(ballX + this.ballRadius> this.screenSize[0]){
+            this.scores[0] ++;
+            hasToReplay = true;
+        }
+        else if(ballX - this.ballRadius < 0){
+            this.scores[1] ++;
+            hasToReplay = true;
+        }
+        if(hasToReplay){
+            this.spawnBall()
+        }
+
+        return hasToReplay
     }
 
     getState() {
@@ -63,8 +95,13 @@ class Game {
         
         return {
             paddles: this.paddlesY,
-            ball: this.ball.getPos()
+            ball: this.ball.getPos(),
+            startIn: this.startIn
         };
+    }
+
+    getScores(){
+        return this.scores
     }
 
     getPaddles(){

@@ -1,7 +1,7 @@
 
 
 class Ball{
-    constructor(screenSize, startX, startY, radius, speed, startAngle){
+    constructor(screenSize, startX, startY, radius, speed, startAngle, startSpeed){
 
         this.radius = radius
         this.screenSize = screenSize;
@@ -9,25 +9,30 @@ class Ball{
         this.x = startX;
         this.y = startY;
 
+        this.startSpeed = startSpeed
+
         this.speed = speed;
 
         //same angle with random start direction
-        var angle = (startAngle) * (Math.random() < 0.5 ? -1 : 1);
-        this.dirX = Math.cos(angle);
+        var direction = Math.random() < 0.5 ? -1 : 1; // random between -1 and 1 logic (-1 or 1)
+        var angle = (startAngle) * (Math.random() * 2 - 1); //random between -1 and 1, analogic (spectrum of values)
+        this.dirX = direction * Math.cos(angle);
         this.dirY = Math.sin(angle);
 
+        this.firstBounce = true; //is it the ball first bounce or not, used to apply a different speed to the first throw of the ball 
     }
 
     move(){
-        var potentialX = this.x + (this.dirX * this.speed);
-        var potentialY = this.y + (this.dirY * this.speed);
+        var currentSpeed = this.speed
+        if(this.firstBounce){
+            currentSpeed = this.startSpeed;
+        }
 
-        if(potentialX + this.radius > this.screenSize[0] || potentialX < this.radius){
-            this.dirX *= -1;
-        }
-        else{
-            this.x = potentialX;
-        }
+
+
+        this.x = this.x + (this.dirX * currentSpeed);
+
+        var potentialY = this.y + (this.dirY * currentSpeed);
         if(potentialY + this.radius > this.screenSize[1] || potentialY < this.radius){
             this.dirY *= -1;
         }
@@ -46,6 +51,10 @@ class Ball{
             
             if((this.x + this.radius > paddle.x && this.x - this.radius < paddle.x + paddle.width) && 
             (this.y + this.radius > paddle.y && this.y  - this.radius< paddle.y + paddle.height)){
+
+                if(this.firstBounce){
+                    this.firstBounce = false;
+                }
 
                 //we determine the direction : if we check the right or left player, we set a different direction to the bounce
                 var direction = 1;

@@ -24,11 +24,15 @@ class Paddle{
     }
 }
 
-export function spawnPaddles(paddleList, canvasSize, startInfo, paddleColor, paddleBorderRadius){
+export function spawnPaddles(playerId, paddleList, canvasSize, startInfo, playerColor, oppenentColor, paddleBorderRadius){
 
     for(let id = 0; id < 2; id++){
+        var color = playerColor;
+        if(id != playerId){
+            color = oppenentColor
+        }
         const startPlayerInfo = startInfo.paddles[id]
-        const paddle = new Paddle(startPlayerInfo.startX, startPlayerInfo.startY, startInfo.paddleWidth, startInfo.paddleHeight, paddleColor, paddleBorderRadius)
+        const paddle = new Paddle(startPlayerInfo.startX, startPlayerInfo.startY, startInfo.paddleWidth, startInfo.paddleHeight, color, paddleBorderRadius)
 
         paddleList.push(paddle)
     }
