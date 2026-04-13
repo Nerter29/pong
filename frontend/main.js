@@ -18,6 +18,7 @@ var gameState = null;
 var startInfo = null;
 var status = "en attente d'un 2ème joueur";
 var canvasDisplay = "none"
+var controlsDisplay = "none"
 
 const gameCanvas = document.getElementById("game-canvas");
 const ctx = gameCanvas.getContext('2d');
@@ -66,6 +67,7 @@ function updateInfoBloc(){
     document.getElementById("room").innerHTML = `<strong>Salle :</strong> ${roomId}`;
     document.getElementById("status").innerHTML = `<strong>Status :</strong> ${status}`;
     document.getElementById("game-canvas").style.display = canvasDisplay;
+    document.getElementById("controls-bloc").style.display = controlsDisplay;
 }
 
 function activateArrowButtons(){
@@ -122,9 +124,17 @@ function drawTerrain(){
 function start(){
     if(startInfo != null){
         
+        
+
+        window.addEventListener("resize", () => {
+            setUpCanvas(gameCanvas, ctx, startInfo.screenWidth, startInfo.screenHeight, windowFilling);
+            canvasSize = [gameCanvas.width, gameCanvas.height];
+        });
+
         setUpCanvas(gameCanvas, ctx, startInfo.screenWidth, startInfo.screenHeight, windowFilling);
-        gameScreenSize = [startInfo.screenWidth, startInfo.screenHeight]
         canvasSize = [gameCanvas.width, gameCanvas.height];
+
+        gameScreenSize = [startInfo.screenWidth, startInfo.screenHeight]
         paddleList = [];
         spawnPaddles(playerId, paddleList, canvasSize, startInfo, playerColor, oppenentColor, paddleBorderRadius)
         
@@ -134,6 +144,7 @@ function start(){
 
         status = "partie en cours";
         canvasDisplay = "block"
+        controlsDisplay = "flex"
         updateInfoBloc();
         activateArrowButtons()
     }
