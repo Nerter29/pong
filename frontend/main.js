@@ -7,8 +7,8 @@ const TICK_RATE = 60;
 const TICK_INTERVAL = 1000 / TICK_RATE;
 
 
-let ws = new WebSocket("wss://nerter.fr/pong/");
-//let ws = new WebSocket("http://127.0.0.1:3001/");
+//let ws = new WebSocket("wss://nerter.fr/pong/");
+let ws = new WebSocket("http://127.0.0.1:3001/");
 
 //global variables used to store all the game informations thanks to the on message function down bellow
 let roomId = 0;
@@ -58,11 +58,27 @@ var scores = {
 var paddleList = []
 var ball;
 
+var upPressed = false;
+var downPressed = false;
+
 function updateInfoBloc(){
     document.getElementById("playerId").innerHTML = `<strong>Identifiant de joueur :</strong> ${playerId}`;
     document.getElementById("room").innerHTML = `<strong>Salle :</strong> ${roomId}`;
     document.getElementById("status").innerHTML = `<strong>Status :</strong> ${status}`;
     document.getElementById("game-canvas").style.display = canvasDisplay;
+}
+
+function activateArrowButtons(){
+    const upBtn = document.getElementById("up-btn")
+    const downBtn = document.getElementById("down-btn")
+    upBtn.addEventListener("pointerdown", () => {upPressed = true;});
+    upBtn.addEventListener("pointerup", () => {upPressed = false;});
+    upBtn.addEventListener("pointerleave", () => {upPressed = false;});
+
+    downBtn.addEventListener("pointerdown", () => {downPressed = true;});
+    downBtn.addEventListener("pointerup", () => {downPressed = false;});
+    downBtn.addEventListener("pointerleave", () => {downPressed = false;});
+
 }
 
 function displayScores(){
@@ -119,6 +135,7 @@ function start(){
         status = "partie en cours";
         canvasDisplay = "block"
         updateInfoBloc();
+        activateArrowButtons()
     }
     setInterval(mainLoop, TICK_INTERVAL);
 }
@@ -212,11 +229,11 @@ document.addEventListener("keyup", (event) => {
 function sendInput(){
     let input = "";
 
-    if (keys["ArrowUp"]) {
+    if (keys["ArrowUp"] || upPressed) {
         input = "up";
     }
 
-    if (keys["ArrowDown"]) {
+    if (keys["ArrowDown"] || downPressed) {
         input = "down";
     }
 

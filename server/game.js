@@ -4,7 +4,7 @@ const Paddle = require("./paddle");
 
 class Game {
     constructor() {
-        this.screenSize = [850, 500]
+        this.screenSize = [750, 500]
 
         this.paddleWidth = 12
         this.paddleHeight = 70

@@ -43,10 +43,16 @@
 @media (min-width: 1000px){/*horizontal*/
     .title-bloc{flex-direction: row;}
 
+    .button-group{display: none;}
+    .control-text{display: flex;}
+
 }
 
 @media (max-width: 1000px){/*vertical*/
     .title-bloc{flex-direction: column;}
+
+    .control-text{display: none;}
+    .button-group{display: flex;}
 
 }
 
@@ -61,11 +67,14 @@ h1{
     text-align: center;
     color : var(--purple-12);
     font-family: Noto;
+    margin: 0
 }
 p, li{
     color : var(--purple-12);
     font-family: K2D;
 }
+
+
 ul{
     margin: 0;
     padding: 0;
@@ -98,7 +107,6 @@ li{
 
 }
 
-
 .canvas-bloc{
     width: 100%;
     height: 100%;
@@ -114,3 +122,48 @@ li{
     background-color: var(--purple-2);
     border-radius: 10px;
 }
+
+.controls-bloc{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+}
+
+
+.button-group{
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top : 0.5em;
+}
+
+.control-btn{
+    width: 40px;
+    height: 40px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat; 
+    background-color: transparent;
+    border : solid var(--purple-12) 2px;
+    border-radius: 5px;
+    margin-bottom : 0.5em;
+}
+
+.control-text >p{
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.6em;
+}
+
+
+#up-btn{
+    background-image: url(../../../assets/images/po/icons/up-arrow.png);
+    
+}
+#down-btn{
+    background-image: url(../../../assets/images/po/icons/down-arrow.png);
+}
+
