@@ -9,7 +9,7 @@ class Game {
         this.paddleWidth = 12
         this.paddleHeight = 70
         this.paddleStartY = this.screenSize[1] / 2 - this.paddleHeight / 2
-        this.paddleSpeed = 4;
+        this.paddleSpeed = 3.5;
         this.paddleXSpacing = 10
 
         this.paddles = [
@@ -30,7 +30,7 @@ class Game {
         this.ballRadius = 3;
         this.ballStartX = this.screenSize[0] / 2 
         this.ballStartY = this.screenSize[1] / 2
-        this.ballSpeed = 4.5;
+        this.ballSpeed = 4.8;
         this.ballStartSpeed = 2.25;
         this.ballStartAngle = Math.PI / 4;
         this.ball = null

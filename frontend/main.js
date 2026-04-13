@@ -1,14 +1,16 @@
 import {setUpCanvas} from './canvas.js';
 import {spawnPaddles}  from './paddle.js';
 import {Ball}  from './ball.js';
+import {spawnParticlePatch, updateParticles}  from './particle.js';
+
 
 
 const TICK_RATE = 60;
 const TICK_INTERVAL = 1000 / TICK_RATE;
 
 
-//let ws = new WebSocket("wss://nerter.fr/pong/");
-let ws = new WebSocket("http://127.0.0.1:3001/");
+let ws = new WebSocket("wss://nerter.fr/pong/");
+//let ws = new WebSocket("http://127.0.0.1:3001/");
 
 //global variables used to store all the game informations thanks to the on message function down bellow
 let roomId = 0;
@@ -27,7 +29,7 @@ var gameScreenSize = canvasSize;
 
 
 //the proportion of the window that is filled by the canvas
-const windowFilling = 0.8
+const windowFilling = 0.75
 
 const countdownColor = "#f2d5f5";
 
@@ -61,6 +63,12 @@ var ball;
 
 var upPressed = false;
 var downPressed = false;
+
+//particles is a list of patch of particles
+let particles = [];
+
+var lastTime = Date.now()
+var deltatime = 0
 
 function updateInfoBloc(){
     document.getElementById("playerId").innerHTML = `<strong>Identifiant de joueur :</strong> ${playerId}`;
@@ -153,6 +161,9 @@ function start(){
 
 function mainLoop() {
 
+    deltatime = Date.now() - lastTime;
+    lastTime = Date.now()
+
     ctx.clearRect( 0, 0, gameScreenSize[0], gameScreenSize[1]);
 
     drawTerrain()
@@ -172,11 +183,13 @@ function mainLoop() {
             displayCountdown(gameState.startIn)
         }
     }
+    updateParticles(particles, deltatime, ctx)
+
     sendInput()
 
 }
 
-//---------------------------------------message receiving------------------------------------------
+//---------------------------------------message reception------------------------------------------
 
 ws.onmessage = function(event) {
     let message = JSON.parse(event.data);
@@ -200,6 +213,11 @@ ws.onmessage = function(event) {
 
     if(message.type === "score"){
         scores = message.data
+    }
+
+    if(message.type === "collision"){
+        spawnParticlePatch(particles, message.data.x, message.data.y, message.data.angle, message.data.direction, 20, playerColor)
+
     }
 
     if (message.type === "error"){

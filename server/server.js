@@ -129,10 +129,20 @@ function gameLoop(room) {
     }
     
     
-    game.ball.collideWithPaddles(game.getPaddles());
+    var hasCollided = game.ball.collideWithPaddles(game.getPaddles());
     var hasToReplay = game.detectPoints()
     if(hasToReplay){
         sendDataToRoom(room, game.getScores(), "score")
+    }
+    if(hasCollided){
+        var pos = game.ball.getPos()
+        var data = {
+            x : pos.x,
+            y : pos.y,
+            angle : game.ball.bounceAngle,
+            direction : game.ball.direction
+        }
+        sendDataToRoom(room, data, "collision")
     }
     //send the state to every clients
     sendDataToRoom(room, game.getState(), "state")
