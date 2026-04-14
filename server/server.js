@@ -197,7 +197,7 @@ wss.on("connection", function (ws, req) {
     const url = new URL(req.url, "http://localhost");
     const wantedRoomId = url.searchParams.get("room");
 
-    var room = findRoom(wantedRoomId);
+    var room = findRoom(parseInt(wantedRoomId));
 
     var playerId = getPlayerId(room, ws);
 
