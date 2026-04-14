@@ -7,7 +7,7 @@ function broadcastInformations(apiServer, apiPort, rooms){
         next();
     });
 
-    apiServer.get("/api", function (req, res){
+    apiServer.get("/", function (req, res){
         let roomsInfo = []
         for(let i = 0; i < rooms.length; i++){
             var currentRoom = rooms[i]
