@@ -1,6 +1,12 @@
 
 export function broadcastInformations(apiServer, apiPort, rooms){
 
+    //so any browser can access the json
+    apiServer.use((req, res, next) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        next();
+    });
+
     apiServer.get("/api", function (req, res){
         let roomsInfo = []
         for(let i = 0; i < rooms.length; i++){

@@ -28,9 +28,8 @@ const apiPort = 3002;
 const express = require("express");
 const apiServer = express();
 
+
 broadcastInformations(apiServer, apiPort, rooms)
-
-
 
 
 //------------------------------------Rooms and Players management-----------------------------------------
