@@ -18,6 +18,7 @@ function broadcastInformations(apiServer, apiPort, rooms){
 
         }
         res.json(roomsInfo)
+        console.log("api hit")
     });
 
     apiServer.listen(apiPort, function () {
