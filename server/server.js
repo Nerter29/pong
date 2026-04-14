@@ -1,7 +1,10 @@
+import { broadcastInformations } from "./api.js";
+
 const WebSocket = require("ws");
 
-const port = 3001;
-const wss = new WebSocket.Server({ port: port });
+const wssPort = 3001;
+const wss = new WebSocket.Server({ wssPort: wssPort });
+
 
 const TICK_RATE = 60;
 const TICK_INTERVAL = 1000 / TICK_RATE;
@@ -14,8 +17,23 @@ const Game = require("./game");
 
 var rooms = [];
 
-
 var lastTime = Date.now()
+
+
+
+//----------------------------------API--------------------------------------
+// the api is used to communicate the server status to anyone, like the room status, players connected etc.
+
+const apiPort = 3002;
+const express = require("express");
+const apiServer = express();
+
+broadcastInformations(apiServer, apiPort, rooms)
+
+
+
+
+//------------------------------------Rooms and Players management-----------------------------------------
 
 function getRoomId(){
     //retruns an id, insuring that it is not taken by an other room
