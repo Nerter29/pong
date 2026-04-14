@@ -1,9 +1,8 @@
-import { broadcastInformations } from "./api.js";
-
+const { broadcastInformations } = require("./api.js");
 const WebSocket = require("ws");
 
 const wssPort = 3001;
-const wss = new WebSocket.Server({ wssPort: wssPort });
+const wss = new WebSocket.Server({ port: wssPort });
 
 
 const TICK_RATE = 60;
@@ -28,8 +27,8 @@ const apiPort = 3002;
 const express = require("express");
 const apiServer = express();
 
-
 broadcastInformations(apiServer, apiPort, rooms)
+
 
 
 //------------------------------------Rooms and Players management-----------------------------------------

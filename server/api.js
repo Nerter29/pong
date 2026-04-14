@@ -1,5 +1,5 @@
 
-export function broadcastInformations(apiServer, apiPort, rooms){
+function broadcastInformations(apiServer, apiPort, rooms){
 
     //so any browser can access the json
     apiServer.use((req, res, next) => {
@@ -21,7 +21,11 @@ export function broadcastInformations(apiServer, apiPort, rooms){
     });
 
     apiServer.listen(apiPort, function () {
-    console.log("API server running on port " + apiPort);
-});
+        console.log("API server running on port " + apiPort);
+    });
 
 }
+
+module.exports = {
+    broadcastInformations
+};
