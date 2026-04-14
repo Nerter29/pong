@@ -79,25 +79,51 @@ function getPlayerId(room){
 }
 
 
-function createRoom() {
+function createRoom(wantedId) {
     //creates a default room that will contain an id, a player list, a game and a loop to run the game 
+    var verifiedId = wantedId
+
+    //when the player doesn't want any id, we give him an arbitrary one
+    if(wantedId == -1){
+        verifiedId = getRoomId()
+    }
+    else{
+        //we check if the wanted Id is already taken, if it is, we set a new id
+        var idTaken = false
+        for(var i = 0; i < rooms.length; i++){
+            if(rooms[i].id == wantedId){
+                idTaken = true
+            }
+        }
+        if(idTaken){
+            verifiedId = getRoomId()
+        }
+    }
+    
     return {
-        id : getRoomId(),
+        id : verifiedId,
         players: [],
         game: new Game(),
         loop: null
     };
 }
 
-function findRoom() {
+function findRoom(wantedId) {
     //find a room by checking if there is one that is waiting for players, if there is not, creates a new room
+
+    var anyId = false
+    if(wantedId == -1){
+        anyId = true
+    }
 
     for (var i = 0; i < rooms.length; i++) {
         if (rooms[i].players.length < playerPerRoom) {
-            return rooms[i];
+            if(wantedId == rooms[i].id || anyId){
+                return rooms[i];
+            }
         }
     }
-    var newRoom = createRoom();
+    var newRoom = createRoom(wantedId);
     rooms.push(newRoom);
     return newRoom;
 }
@@ -164,12 +190,14 @@ function gameLoop(room) {
     sendDataToRoom(room, game.getState(), "state")
 }
 
-wss.on("connection", function (ws) {
+wss.on("connection", function (ws, req) {
 
     //----------------------------------------------Player Connection-----------------------------------------------
+    //check the wanted roomId in the url
+    const url = new URL(req.url, "http://localhost");
+    const wantedRoomId = url.searchParams.get("room");
 
-
-    var room = findRoom();
+    var room = findRoom(wantedRoomId);
 
     var playerId = getPlayerId(room, ws);
 
