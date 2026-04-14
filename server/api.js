@@ -9,15 +9,20 @@ function broadcastInformations(apiServer, apiPort, rooms){
 
     apiServer.get("/", function (req, res){
         let roomsInfo = []
+        var totalPlayerNum = 0
         for(let i = 0; i < rooms.length; i++){
             var currentRoom = rooms[i]
             roomsInfo.push({
                 id : currentRoom.id,
-                players : currentRoom.players
+                playerNum : currentRoom.players.length
             })
+            totalPlayerNum += currentRoom.players.length
 
         }
-        res.json(roomsInfo)
+        res.json({
+            rooms : roomsInfo,
+            playersNum : totalPlayerNum
+        })
         console.log("api hit")
     });
 
