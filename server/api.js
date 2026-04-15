@@ -8,14 +8,14 @@ function broadcastInformations(apiServer, apiPort, rooms){
     });
 
     apiServer.get("/", function (req, res){
-        let roomsInfo = []
+        let roomsInfo = {}
         var totalPlayerNum = 0
         for(let i = 0; i < rooms.length; i++){
             var currentRoom = rooms[i]
-            roomsInfo.push({
+            roomsInfo[currentRoom.id] = {
                 id : currentRoom.id,
                 playerNum : currentRoom.players.length
-            })
+            }
             totalPlayerNum += currentRoom.players.length
 
         }
@@ -23,7 +23,6 @@ function broadcastInformations(apiServer, apiPort, rooms){
             rooms : roomsInfo,
             playersNum : totalPlayerNum
         })
-        console.log("api hit")
     });
 
     apiServer.listen(apiPort, function () {
