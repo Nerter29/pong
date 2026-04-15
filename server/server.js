@@ -223,6 +223,10 @@ wss.on("connection", function (ws, req) {
         }, TICK_INTERVAL);
     }
 
+    setInterval(() => {
+        ws.ping();
+    }, 30000)
+
 
     //----------------------------------------------Messages Receptions-----------------------------------------------
 
