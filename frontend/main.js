@@ -11,8 +11,8 @@ const TICK_INTERVAL = 1000 / TICK_RATE;
 const params = new URLSearchParams(window.location.search);
 const wantedRoomId = params.get("room");
 
-let ws = new WebSocket(`wss://nerter.fr/pong/?room=${wantedRoomId}`);
-//let ws = new WebSocket(`http://127.0.0.1:3001/?room=${wantedRoomId}`);
+//let ws = new WebSocket(`wss://nerter.fr/pong/?room=${wantedRoomId}`);
+let ws = new WebSocket(`http://127.0.0.1:3001/?room=${wantedRoomId}`);
 
 //global variables used to store all the game informations thanks to the on message function down bellow
 let roomId = 0;
@@ -24,6 +24,8 @@ var status = "en attente d'un 2ème joueur";
 var canvasDisplay = "none"
 var controlsDisplay = "none"
 
+var ballSpeedMultiplier = 1
+
 const gameCanvas = document.getElementById("game-canvas");
 const ctx = gameCanvas.getContext('2d');
 var canvasSize = [gameCanvas.width, gameCanvas.height];
@@ -33,12 +35,12 @@ var gameScreenSize = canvasSize;
 //the proportion of the window that is filled by the canvas
 const windowFilling = 0.75
 
-const countdownColor = "#f2d5f5";
+const lightPink = "#f2d5f5";
 
-const playerColor = "#94b9ec";
-const oppenentColor = "#405066";
+const lightBlue = "#94b9ec";
+const darkBlue = "#405066";
 
-const ballColor = "#e896f1";
+const mainPink = "#e896f1";
 const terrainColor = "#e896f1"
 
 const paddleBorderRadius = 2;
@@ -46,6 +48,7 @@ const paddleBorderRadius = 2;
 //text
 const scoreSize = 50
 const countdownSize = 100
+const speedMultSize = 12
 //placement of the score texts based on subdivion of screen
 const scoreXScreenDivider = 16
 const scoreYScreenDivider = 10
@@ -96,11 +99,11 @@ function activateArrowButtons(){
 function displayScores(){
     //display the scores at symetrical parts of the screen, and calculates the space of the text so it's always symetrical
     var textMultiplier = 0.55 * scores[0].toString().length // we multiply the textsize by the number of digits it has
-    var color0 = playerColor
-    var color1 = oppenentColor;
+    var color0 = lightBlue
+    var color1 = darkBlue;
     if(playerId == 1){
-        var color0 = oppenentColor
-        var color1 = playerColor;
+        var color0 = darkBlue
+        var color1 = lightBlue;
     }
     ctx.font = scoreSize + "px Noto";
     ctx.fillStyle = color0;
@@ -113,8 +116,15 @@ function displayCountdown(countdown){
     //display the countdown at the center of the screen
     var textMultiplier = 0.55 * scores[0].toString().length // we multiply the textsize by the number of digits it has
     ctx.font = countdownSize + "px Noto";
-    ctx.fillStyle = countdownColor;
+    ctx.fillStyle = lightPink;
     ctx.fillText(countdown, gameScreenSize[0] / 2 - (countdownSize * textMultiplier) / 2 , gameScreenSize[1] / 2 - 100);
+}
+
+function displaySpeedMult(speedMult){
+    //display the speed multiplier at the bottom left of the screen
+    ctx.font = speedMultSize + "px Noto";
+    ctx.fillStyle = lightPink;
+    ctx.fillText("Vitesse : x" + speedMult, 5 , gameScreenSize[1] - 5);
 }
 
 function drawTerrain(){
@@ -146,9 +156,9 @@ function start(){
 
         gameScreenSize = [startInfo.screenWidth, startInfo.screenHeight]
         paddleList = [];
-        spawnPaddles(playerId, paddleList, canvasSize, startInfo, playerColor, oppenentColor, paddleBorderRadius)
+        spawnPaddles(playerId, paddleList, canvasSize, startInfo, lightBlue, darkBlue, paddleBorderRadius)
         
-        ball = new Ball(startInfo.ballStartX, startInfo.ballStartY, startInfo.ballRadius, ballColor)
+        ball = new Ball(startInfo.ballStartX, startInfo.ballStartY, startInfo.ballRadius, mainPink)
 
         gameScreenSize = [startInfo.screenWidth, startInfo.screenHeight]
 
@@ -184,8 +194,12 @@ function mainLoop() {
         if(gameState.startIn > 0){
             displayCountdown(gameState.startIn)
         }
+
+        ballSpeedMultiplier = gameState.ballSpeedMultiplier
     }
     updateParticles(particles, deltatime, ctx)
+
+    displaySpeedMult(ballSpeedMultiplier)
 
     sendInput()
 
@@ -218,7 +232,7 @@ ws.onmessage = function(event) {
     }
 
     if(message.type === "collision"){
-        spawnParticlePatch(particles, message.data.x, message.data.y, message.data.angle, message.data.direction, 20, playerColor)
+        spawnParticlePatch(particles, message.data.x, message.data.y, message.data.angle, message.data.direction, 20, lightBlue)
 
     }
 

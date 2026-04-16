@@ -40,6 +40,11 @@ class Game {
         this.countdownTimer = 0;
         this.startIn = this.startCountdown / 1000
 
+        this.ballSpeedMultiplier = 1
+        this.ballSpeedIncrease = 1.15
+        this.ballSpeedIncreaseDelay = 7
+        
+
         this.startInfo = {
             screenWidth : this.screenSize[0],
             screenHeight : this.screenSize[1],
@@ -53,9 +58,8 @@ class Game {
             ballStartX : this.ballStartX,
             ballStartY : this.ballStartY,
             ballRadius : this.ballRadius,
-            
+                        
         }
-
     }
 
     spawnBall(){
@@ -96,7 +100,8 @@ class Game {
         return {
             paddles: this.paddlesY,
             ball: this.ball.getPos(),
-            startIn: this.startIn
+            startIn: this.startIn,
+            ballSpeedMultiplier : this.ballSpeedMultiplier.toFixed(2)
         };
     }
 

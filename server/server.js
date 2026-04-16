@@ -156,9 +156,10 @@ function sendConnectionPackage(ws, room, playerId){
 
 function gameLoop(room) {
     var game = room.game
+    var ball = game.ball
     if(game.startIn == 0){
     
-        game.ball.move()
+        ball.move(game.ballSpeedMultiplier)
     }
     else{
         game.countdownTimer += Date.now() - lastTime
@@ -171,20 +172,26 @@ function gameLoop(room) {
     }
     
     
-    var hasCollided = game.ball.collideWithPaddles(game.getPaddles());
+    var hasCollided = ball.collideWithPaddles(game.getPaddles());
     var hasToReplay = game.detectPoints()
     if(hasToReplay){
         sendDataToRoom(room, game.getScores(), "score")
+        game.ballSpeedMultiplier = 1
+        ball.bounceCounter = 0
     }
     if(hasCollided){
-        var pos = game.ball.getPos()
+        var pos = ball.getPos()
         var data = {
             x : pos.x,
             y : pos.y,
-            angle : game.ball.bounceAngle,
-            direction : game.ball.direction
+            angle : ball.bounceAngle,
+            direction : ball.direction
         }
         sendDataToRoom(room, data, "collision")
+        if(ball.bounceCounter >= game.ballSpeedIncreaseDelay ){
+            game.ballSpeedMultiplier *= game.ballSpeedIncrease
+            ball.bounceCounter = 0
+        }
     }
     //send the state to every clients
     sendDataToRoom(room, game.getState(), "state")

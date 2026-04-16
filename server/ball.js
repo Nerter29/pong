@@ -22,18 +22,17 @@ class Ball{
         this.bounceAngle = 0
         this.direction = 1;
 
+        this.bounceCounter = 0
         this.firstBounce = true; //is it the ball first bounce or not, used to apply a different speed to the first throw of the ball 
     }
 
-    move(){
+    move(speedMultiplier){
         var currentSpeed = this.speed
         if(this.firstBounce){
             currentSpeed = this.startSpeed;
         }
 
-
-
-        this.x = this.x + (this.dirX * currentSpeed);
+        this.x = this.x + (this.dirX * currentSpeed * speedMultiplier);
 
         var potentialY = this.y + (this.dirY * currentSpeed);
         if(potentialY + this.radius > this.screenSize[1] || potentialY < this.radius){
@@ -57,6 +56,7 @@ class Ball{
             
             if((this.x + this.radius > paddle.x && this.x - this.radius < paddle.x + paddle.width) && 
             (this.y + this.radius > paddle.y && this.y  - this.radius< paddle.y + paddle.height)){
+                this.bounceCounter ++;
                 hasCollided = true;
                 if(this.firstBounce){
                     this.firstBounce = false;
