@@ -31,9 +31,17 @@ const ctx = gameCanvas.getContext('2d');
 var canvasSize = [gameCanvas.width, gameCanvas.height];
 var gameScreenSize = canvasSize;
 
-
 //the proportion of the window that is filled by the canvas
-const windowFilling = 0.75
+var windowFilling = 0.75;
+
+//@media equivalent
+if (window.matchMedia("(min-width: 1000px)").matches) {//horizontal
+    windowFilling = 0.75
+}
+if (window.matchMedia("(max-width: 1000px)").matches) {//vertical
+    windowFilling = 0.95
+}
+
 
 const lightPink = "#f2d5f5";
 
