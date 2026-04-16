@@ -151,6 +151,31 @@ function sendConnectionPackage(ws, room, playerId){
     }));
 }
 
+
+function sendParticleInfo(hasCollidedWithPaddle,room, game, ball){
+    var type;
+    if(hasCollidedWithPaddle){
+        type = "paddle"
+    }
+    else{
+        type = "wall"
+    }
+    var pos = ball.getPos()
+    var data = {
+        x : pos.x,
+        y : pos.y,
+        angle : ball.bounceAngle,
+        direction : ball.direction,
+        type : type
+    }
+    sendDataToRoom(room, data, "collision")
+    if(ball.bounceCounter >= game.ballSpeedIncreaseDelay ){
+        game.ballSpeedMultiplier *= game.ballSpeedIncrease
+        ball.bounceCounter = 0
+    }
+    
+}
+
 //--------------------------------------------Game-----------------------------------------
 
 
@@ -159,7 +184,18 @@ function gameLoop(room) {
     var ball = game.ball
     if(game.startIn == 0){
     
-        ball.move(game.ballSpeedMultiplier)
+        var hasCollidedWithWall = ball.move(game.ballSpeedMultiplier)
+        var hasCollidedWithPaddle = ball.collideWithPaddles(game.getPaddles());
+        var hasToReplay = game.detectPoints()
+
+        if(hasToReplay){
+            sendDataToRoom(room, game.getScores(), "score")
+            game.ballSpeedMultiplier = 1
+            ball.bounceCounter = 0
+        }
+        if(hasCollidedWithPaddle || hasCollidedWithWall){
+            sendParticleInfo(hasCollidedWithPaddle,room, game, ball)
+        }
     }
     else{
         game.countdownTimer += Date.now() - lastTime
@@ -171,28 +207,7 @@ function gameLoop(room) {
         }
     }
     
-    
-    var hasCollided = ball.collideWithPaddles(game.getPaddles());
-    var hasToReplay = game.detectPoints()
-    if(hasToReplay){
-        sendDataToRoom(room, game.getScores(), "score")
-        game.ballSpeedMultiplier = 1
-        ball.bounceCounter = 0
-    }
-    if(hasCollided){
-        var pos = ball.getPos()
-        var data = {
-            x : pos.x,
-            y : pos.y,
-            angle : ball.bounceAngle,
-            direction : ball.direction
-        }
-        sendDataToRoom(room, data, "collision")
-        if(ball.bounceCounter >= game.ballSpeedIncreaseDelay ){
-            game.ballSpeedMultiplier *= game.ballSpeedIncrease
-            ball.bounceCounter = 0
-        }
-    }
+
     //send the state to every clients
     sendDataToRoom(room, game.getState(), "state")
 }

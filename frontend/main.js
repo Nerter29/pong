@@ -232,7 +232,14 @@ ws.onmessage = function(event) {
     }
 
     if(message.type === "collision"){
-        spawnParticlePatch(particles, message.data.x, message.data.y, message.data.angle, message.data.direction, 20, lightBlue)
+        var color;
+        if(message.data.type == "paddle"){
+            color = lightBlue;
+        }
+        else{
+            color = mainPink
+        }
+        spawnParticlePatch(particles, message.data.x, message.data.y, message.data.angle, message.data.direction, 30, color)
 
     }
 

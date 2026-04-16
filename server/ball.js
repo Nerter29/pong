@@ -27,6 +27,8 @@ class Ball{
     }
 
     move(speedMultiplier){
+        //this function moves the ball and handle the collisions with the walls, if it collide with it, it retruns it.
+        var hasCollided = false
         var currentSpeed = this.speed
         if(this.firstBounce){
             currentSpeed = this.startSpeed;
@@ -36,11 +38,17 @@ class Ball{
 
         var potentialY = this.y + (this.dirY * currentSpeed);
         if(potentialY + this.radius > this.screenSize[1] || potentialY < this.radius){
+            //get the bounce angle from dirX and dirY
+            this.bounceAngle = Math.atan2(this.dirY, this.dirX)
+            this.direction = 1
             this.dirY *= -1;
+            hasCollided = true
         }
         else{
             this.y = potentialY;
         }
+
+        return hasCollided
     }
 
     collideWithPaddles(paddles){

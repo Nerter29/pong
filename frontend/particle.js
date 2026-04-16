@@ -21,7 +21,9 @@ export class Particle {
         this.life = this.startLife;
 
         this.radiusDiff = 0.5
-        this.radius = 1.2 + randomWithOpposite(this.radiusDiff);
+        this.startRadius = 1.2 + randomWithOpposite(this.radiusDiff);
+
+        this.radius = this.startRadius
 
         this.hueDiff = 10
         this.luminosityDiff = 10
@@ -31,8 +33,8 @@ export class Particle {
         this.saturation = hsl[1]
         this.luminosity = randomWithOpposite(this.luminosityDiff) + hsl[2]
 
-        this.gravityDiff = 0.0005
-        this.gravity = 0.001 + randomWithOpposite(this.gravityDiff)
+        this.gravityDiff = 0.001
+        this.gravity = 0.0015 + randomWithOpposite(this.gravityDiff)
     }
 
     update(dt) {
@@ -43,12 +45,15 @@ export class Particle {
             this.vy += this.gravity
 
             this.life -= dt;
+            
         }
     }
 
     draw(ctx) {
         if(this.life > 0){
-            ctx.globalAlpha = Math.max(this.life / this.startLife, 0);
+            var lifeProporion = Math.max(this.life / this.startLife, 0);
+            this.radius = lifeProporion * this.startRadius
+            ctx.globalAlpha = lifeProporion
             ctx.beginPath()
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
             ctx.fillStyle = `hsl(${this.hue}, 100%, ${this.luminosity}%)`;
@@ -92,10 +97,10 @@ export function updateParticles(particles, dt, ctx) {
     for (let i = particles.length - 1; i >= 0; i--) {
         if(particles[i] != null){
             for(let j = 0; j < particles[i].length; j++){
-            var particle = particles[i][j]
-            particle.update(dt);
-            particle.draw(ctx);  
-        }
+                var particle = particles[i][j]
+                particle.update(dt);
+                particle.draw(ctx);  
+            }
         }
         
     }
