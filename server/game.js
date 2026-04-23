@@ -9,7 +9,7 @@ class Game {
         this.paddleWidth = 12
         this.paddleHeight = 70
         this.paddleStartY = this.screenSize[1] / 2 - this.paddleHeight / 2
-        this.paddleSpeed = 3.5;
+        this.paddleSpeed = 3;
         this.paddleXSpacing = 10
 
         this.paddles = [
@@ -41,8 +41,11 @@ class Game {
         this.startIn = this.startCountdown / 1000
 
         this.ballSpeedMultiplier = 1
-        this.ballSpeedIncrease = 1.15
-        this.ballSpeedIncreaseDelay = 7
+
+        this.ballSpeedIncreaseDelay = 7 // how many time we will add something to the mult
+        this.ballSpeedIncrease = 0.15 // we add that number every delay rounds to the mult
+        this.ballSpeedIncreaseReduce = 0.8 // the number above is multiplied by this number every delay rounds
+        
         
 
         this.startInfo = {

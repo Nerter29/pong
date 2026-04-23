@@ -1,5 +1,1 @@
-particules roses
-api pour donner le nb de players connectés
-page d'accueil avec une vue sur les rooms occupées et moyen de choisir sa room
-mécaniques cools
-le jeu s'accélère quand y'a pas de score depuis longtemps
+balles a effet

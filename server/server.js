@@ -170,7 +170,8 @@ function sendParticleInfo(hasCollidedWithPaddle,room, game, ball){
     }
     sendDataToRoom(room, data, "collision")
     if(ball.bounceCounter >= game.ballSpeedIncreaseDelay ){
-        game.ballSpeedMultiplier *= game.ballSpeedIncrease
+        game.ballSpeedMultiplier += game.ballSpeedIncrease
+        game.ballSpeedIncrease *= game.ballSpeedIncreaseReduce
         ball.bounceCounter = 0
     }
     
@@ -222,8 +223,8 @@ function sendConnectionToWebHook(playerId, roomId, ip){
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            content: `\nUn joueur s'est connecté au serveur Pong !\nId : ${playerId}, Room : ${roomId}, \
-            \nIP : ${ip}\nDate : ${now.getDate()}/${now.getMonth()}/${now.getFullYear()} à ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+            content: `\nUn joueur s'est connecté au serveur Pong !\nId - ${playerId}, Room - ${roomId} \
+            \nIP - ${ip}\nDate - ${now.getDate()}/${now.getMonth()}/${now.getFullYear()} à ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
         })
     });
 
