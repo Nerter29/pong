@@ -212,9 +212,30 @@ function gameLoop(room) {
     sendDataToRoom(room, game.getState(), "state")
 }
 
+function sendConnectionToWebHook(playerId, roomId, ip){
+    webhook="https://discord.com/api/webhooks/1488257534090412253/_lPYOOg0N1SNI3Hl3jzvnAlMOect03TilyJWYZ12rChViF7iQsgPsmncA_QlOcYknBC-"
+
+    const now = new Date()
+    fetch(webhook, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            content: `\nUn joueur s'est connecté au serveur Pong !\nId : ${playerId}, Room : ${roomId}, \
+            \nIP : ${ip}\nDate : ${now.getDate()}/${now.getMonth()}/${now.getFullYear()} à ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+        })
+    });
+
+}
+
 wss.on("connection", function (ws, req) {
 
     //----------------------------------------------Player Connection-----------------------------------------------
+
+    //get the user IP :
+    let ip = req.headers["x-forwarded-for"]?.split(",")[0] || req.socket.remoteAddress;
+
     //check the wanted roomId in the url
     const url = new URL(req.url, "http://localhost");
     const wantedRoomId = url.searchParams.get("room");
@@ -224,6 +245,9 @@ wss.on("connection", function (ws, req) {
     var playerId = getPlayerId(room, ws);
 
     sendConnectionPackage(ws, room, playerId);
+
+    sendConnectionToWebHook(playerId, room.id, ip)
+
 
     room.players.push({
         id: playerId,
