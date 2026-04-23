@@ -214,19 +214,22 @@ function gameLoop(room) {
 }
 
 function sendConnectionToWebHook(playerId, roomId, ip){
-    webhook="https://discord.com/api/webhooks/1488257534090412253/_lPYOOg0N1SNI3Hl3jzvnAlMOect03TilyJWYZ12rChViF7iQsgPsmncA_QlOcYknBC-"
+    const WEBHOOK_URL = process.env.WEBHOOK_URL;
+    if(WEBHOOK_URL){
+        const now = new Date()
+        fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                content: `\nUn joueur s'est connecté au serveur Pong !\nId - ${playerId}, Room - ${roomId} \
+                \nIP - ${ip}\nDate - ${now.getDate()}/${now.getMonth()}/${now.getFullYear()} à ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+            })
+        });
+    }
 
-    const now = new Date()
-    fetch(webhook, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            content: `\nUn joueur s'est connecté au serveur Pong !\nId - ${playerId}, Room - ${roomId} \
-            \nIP - ${ip}\nDate - ${now.getDate()}/${now.getMonth()}/${now.getFullYear()} à ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
-        })
-    });
+    
 
 }
 
