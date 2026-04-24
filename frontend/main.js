@@ -12,8 +12,8 @@ const RENDER_DELAY = 25 // time offset with the server data (in MS)
 const params = new URLSearchParams(window.location.search);
 const wantedRoomId = params.get("room");
 
-//let ws = new WebSocket(`wss://nerter.fr/pong/?room=${wantedRoomId}`);
-let ws = new WebSocket(`http://127.0.0.1:3001/?room=${wantedRoomId}`);
+let ws = new WebSocket(`wss://nerter.fr/pong/?room=${wantedRoomId}`);
+//let ws = new WebSocket(`http://127.0.0.1:3001/?room=${wantedRoomId}`);
 
 //global variables used to store all the game informations thanks to the on message function down bellow
 let roomId = 0;
