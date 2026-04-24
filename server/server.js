@@ -184,9 +184,13 @@ function gameLoop(room) {
     var game = room.game
     var ball = game.ball
     if(game.startIn == 0){
-    
+        var paddles = game.getPaddles()
         var hasCollidedWithWall = ball.move(game.ballSpeedMultiplier)
-        var hasCollidedWithPaddle = ball.collideWithPaddles(game.getPaddles());
+        var hasCollidedWithPaddle = ball.collideWithPaddles(paddles);
+
+        //at each end of the loop, we set the paddles direction to 0, they will be changed when an input is detected down bellow
+        game.resetPaddlesDirection()
+
         var hasToReplay = game.detectPoints()
 
         if(hasToReplay){

@@ -1,7 +1,7 @@
 
 
 class Ball{
-    constructor(screenSize, startX, startY, radius, speed, startAngle, startSpeed){
+    constructor(screenSize, startX, startY, radius, speed, startAngle, startSpeed, effectStrength){
 
         this.radius = radius
         this.screenSize = screenSize;
@@ -19,6 +19,9 @@ class Ball{
         this.dirX = direction * Math.cos(angle);
         this.dirY = Math.sin(angle);
 
+        this.verticalEffect = 0;
+        this.effectStrength = effectStrength
+
         this.bounceAngle = 0
         this.direction = 1;
 
@@ -34,6 +37,9 @@ class Ball{
             currentSpeed = this.startSpeed;
         }
 
+        //apply the effect
+        this.dirY += this.verticalEffect * this.effectStrength
+
         this.x = this.x + (this.dirX * currentSpeed * speedMultiplier);
 
         var potentialY = this.y + (this.dirY * currentSpeed);
@@ -48,6 +54,7 @@ class Ball{
             this.y = potentialY;
         }
 
+        //console.log(this.dirX, this.dirY)
         return hasCollided
     }
 
@@ -86,6 +93,9 @@ class Ball{
                 //we reverse the vector and give it to the ball
                 this.dirX = this.direction * (Math.cos(this.bounceAngle));
                 this.dirY =(-Math.sin(this.bounceAngle));
+
+                //the effect of the ball is relative to the direction of the paddle when it hits the ball
+                this.verticalEffect = paddle.direction
             }
         }
 

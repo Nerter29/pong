@@ -1,1 +1,2 @@
-balles a effet
+animation de score
+animation d'effet

@@ -4,21 +4,23 @@ import {Ball}  from './ball.js';
 import {spawnParticlePatch, updateParticles}  from './particle.js';
 
 
-const TICK_RATE = 60;
+const TICK_RATE = 60; // fps
 const TICK_INTERVAL = 1000 / TICK_RATE;
+const RENDER_DELAY = 25 // time offset with the server data (in MS)
 
 //send the url params back to the param of the web socket url
 const params = new URLSearchParams(window.location.search);
 const wantedRoomId = params.get("room");
 
-let ws = new WebSocket(`wss://nerter.fr/pong/?room=${wantedRoomId}`);
-//let ws = new WebSocket(`http://127.0.0.1:3001/?room=${wantedRoomId}`);
+//let ws = new WebSocket(`wss://nerter.fr/pong/?room=${wantedRoomId}`);
+let ws = new WebSocket(`http://127.0.0.1:3001/?room=${wantedRoomId}`);
 
 //global variables used to store all the game informations thanks to the on message function down bellow
 let roomId = 0;
 let playerId = null;
 
 var gameState = null;
+var gameStateBuffer = []; // variable in which we will store the raw data
 var startInfo = null;
 var status = "en attente d'un 2ème joueur";
 var canvasDisplay = "none"
@@ -74,6 +76,9 @@ var scores = {
 
 var paddleList = []
 var ball;
+
+var ballTrailLength = 20
+
 
 var upPressed = false;
 var downPressed = false;
@@ -150,11 +155,43 @@ function drawTerrain(){
     
 }
 
+
+function getInterpolatedData() {
+    //allow to get a clean data stream with less holes in it from the raw data in the buffer, to fix the mess that the network caused
+    //this function fixes the ball trajectory by filling the holes and adds the RENDER_DELAY to every action
+    let now = performance.now() - RENDER_DELAY;
+
+    //clean the buffer
+    while (gameStateBuffer.length >= 2 && gameStateBuffer[1].time <= now) {
+        gameStateBuffer.shift();
+    }
+
+    if(gameStateBuffer.length < 2){
+        return null
+    }
+
+    let g1 = gameStateBuffer[0];
+    let g2 = gameStateBuffer[1];
+
+    let g1Ball = g1.gameState.ball
+    let g2Ball = g2.gameState.ball
+
+    let t = (now - g1.time) / (g2.time - g1.time);
+
+    gameStateBuffer[0].gameState.ball.x = g1Ball.x + (g2Ball.x - g1Ball.x) * t
+    gameStateBuffer[0].gameState.ball.y = g1Ball.y + (g2Ball.y - g1Ball.y) * t
+
+    return gameStateBuffer[0]
+
+}
+
+function spawnBall(){
+    ball = new Ball(startInfo.ballStartX, startInfo.ballStartY, startInfo.ballRadius, mainPink, ballTrailLength)
+}
+
 function start(){
     if(startInfo != null){
-        
-        
-
+    
         window.addEventListener("resize", () => {
             setUpCanvas(gameCanvas, ctx, startInfo.screenWidth, startInfo.screenHeight, windowFilling);
             canvasSize = [gameCanvas.width, gameCanvas.height];
@@ -167,7 +204,7 @@ function start(){
         paddleList = [];
         spawnPaddles(playerId, paddleList, canvasSize, startInfo, lightBlue, darkBlue, paddleBorderRadius)
         
-        ball = new Ball(startInfo.ballStartX, startInfo.ballStartY, startInfo.ballRadius, mainPink)
+        spawnBall()
 
         gameScreenSize = [startInfo.screenWidth, startInfo.screenHeight]
 
@@ -190,7 +227,11 @@ function mainLoop() {
     drawTerrain()
     displayScores()
 
-    if(gameState != null){
+    var gameStateTemp = getInterpolatedData()
+
+    if(gameStateTemp != null){
+        gameState = gameStateTemp.gameState
+
         for(let i = 0; i < paddleList.length; i++){
             var paddle = paddleList[i]
             var playerInfo = gameState.paddles[i]
@@ -198,6 +239,7 @@ function mainLoop() {
             paddle.draw(ctx)
         }
         ball.move(gameState.ball.x, gameState.ball.y);
+        console.log(gameState)
         ball.draw(ctx)
 
         if(gameState.startIn > 0){
@@ -232,12 +274,16 @@ ws.onmessage = function(event) {
     }
 
     if (message.type === "state") {
-        gameState = message.data;
-        //console.log("state received : ", gameState);
+        //fills the buffer with the raw data
+        gameStateBuffer.push({
+            gameState : message.data,
+            time : performance.now()
+        })
     }
 
     if(message.type === "score"){
         scores = message.data
+        spawnBall()
     }
 
     if(message.type === "collision"){

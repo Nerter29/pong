@@ -33,7 +33,9 @@ class Game {
         this.ballSpeed = 4.8;
         this.ballStartSpeed = 2.25;
         this.ballStartAngle = Math.PI / 4;
+        this.ballEffectStrength = 0.003
         this.ball = null
+
         this.spawnBall();
 
         this.startCountdown = 3000;
@@ -66,13 +68,20 @@ class Game {
     }
 
     spawnBall(){
-        this.ball = new Ball(this.screenSize, this.ballStartX, this.ballStartY, this.ballRadius, this.ballSpeed, this.ballStartAngle, this.ballStartSpeed)
+        this.ball = new Ball(this.screenSize, this.ballStartX, this.ballStartY, this.ballRadius,
+        this.ballSpeed, this.ballStartAngle, this.ballStartSpeed, this.ballEffectStrength)
     }
 
     handleInput(playerId, input) {
         let paddle = this.paddles[playerId];
         if (paddle){
             paddle.move(input)
+        }
+    }
+    resetPaddlesDirection() {
+        for(let i = 0; i < this.paddles.length; i++){
+            let paddle = this.paddles[i];
+            paddle.direction = 0
         }
     }
 
