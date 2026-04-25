@@ -152,22 +152,26 @@ function sendConnectionPackage(ws, room, playerId){
 }
 
 
-function sendParticleInfo(hasCollidedWithPaddle,room, game, ball){
-    var type;
-    if(hasCollidedWithPaddle){
-        type = "paddle"
-    }
-    else{
-        type = "wall"
-    }
+function sendParticleInfo(hasCollidedWithPaddle, hasCollidedWithWall,room, game, ball){
+
     var pos = ball.getPos()
     var data = {
         x : pos.x,
         y : pos.y,
         angle : ball.bounceAngle,
         direction : ball.direction,
-        type : type
+        type : ""
     }
+    if(hasCollidedWithPaddle){
+        data.type = "paddle"
+    }
+    else if (hasCollidedWithWall){
+        data.type = "wall"
+    }
+    else{
+        data.type = "score"
+    }
+    
     sendDataToRoom(room, data, "collision")
     if(ball.bounceCounter >= game.ballSpeedIncreaseDelay ){
         game.ballSpeedMultiplier += game.ballSpeedIncrease
@@ -193,14 +197,18 @@ function gameLoop(room) {
 
         var hasToReplay = game.detectPoints()
 
+        //particles
+        if(hasCollidedWithPaddle || hasCollidedWithWall || hasToReplay){
+            sendParticleInfo(hasCollidedWithPaddle, hasCollidedWithWall,room, game, ball)
+        }
+
         if(hasToReplay){
+            game.spawnBall()
             sendDataToRoom(room, game.getScores(), "score")
             game.ballSpeedMultiplier = 1
             ball.bounceCounter = 0
         }
-        if(hasCollidedWithPaddle || hasCollidedWithWall){
-            sendParticleInfo(hasCollidedWithPaddle,room, game, ball)
-        }
+
     }
     else{
         game.countdownTimer += Date.now() - lastTime

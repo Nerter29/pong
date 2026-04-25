@@ -2,16 +2,14 @@ import { hexToHsl, randomInRange, randomWithOpposite } from "./utils.js";
 
 export class Particle {
 
-    constructor(x, y, directionAngle, direction, color) {
+    constructor(x, y, directionAngle, direction, color, angleDiff, speed, speedDiff) {
         this.x = x;
         this.y = y;
 
 
-        this.speedDiff = 0.04
-        this.speed = 0.08 + randomWithOpposite(this.speedDiff)
+        this.speed = speed + randomWithOpposite(speedDiff)
 
-        this.angleDiff = Math.PI / 2
-        var angle = directionAngle + randomWithOpposite(this.angleDiff)
+        var angle = directionAngle + randomWithOpposite(angleDiff)
         this.vx = direction * Math.cos(angle) * this.speed;
         this.vy = -Math.sin(angle) * this.speed;
 
@@ -63,7 +61,7 @@ export class Particle {
     }
 }
 
-export function spawnParticlePatch(particles, x, y, angle, direction, num, color) {
+export function spawnParticlePatch(particles, x, y, angle, direction, num, color, angleDiff, speed, speedDiff) {
     //spawns num particles in a new patch of particles list
 
     //we look for null particles patch in our list
@@ -83,7 +81,7 @@ export function spawnParticlePatch(particles, x, y, angle, direction, num, color
     
     var particleMaxLife = 0
     for (let i = 0; i < num; i++) {
-        var p = new Particle(x, y, angle, direction, color)
+        var p = new Particle(x, y, angle, direction, color, angleDiff, speed, speedDiff)
         particles[patchIndex].push(p);
         particleMaxLife = p.baseStartLife + p.lifeDiff
     }

@@ -13,7 +13,7 @@ const params = new URLSearchParams(window.location.search);
 const wantedRoomId = params.get("room");
 
 let ws = new WebSocket(`wss://nerter.fr/pong/?room=${wantedRoomId}`);
-//let ws = new WebSocket(`http://127.0.0.1:3001/?room=${wantedRoomId}`);
+//ws = new WebSocket(`http://127.0.0.1:3001/?room=${wantedRoomId}`);
 
 //global variables used to store all the game informations thanks to the on message function down bellow
 let roomId = 0;
@@ -77,7 +77,7 @@ var scores = {
 var paddleList = []
 var ball;
 
-var ballTrailLength = 20
+var ballTrailLength = 30
 
 
 var upPressed = false;
@@ -239,7 +239,6 @@ function mainLoop() {
             paddle.draw(ctx)
         }
         ball.move(gameState.ball.x, gameState.ball.y);
-        console.log(gameState)
         ball.draw(ctx)
 
         if(gameState.startIn > 0){
@@ -288,13 +287,24 @@ ws.onmessage = function(event) {
 
     if(message.type === "collision"){
         var color;
+        var num = 30
+        var angleDiff = Math.PI / 2
+        var speed = 0.08
+        var speedDiff = 0.04
         if(message.data.type == "paddle"){
             color = lightBlue;
         }
-        else{
+        else if(message.data.type == "wall"){
             color = mainPink
         }
-        spawnParticlePatch(particles, message.data.x, message.data.y, message.data.angle, message.data.direction, 30, color)
+        else{
+            color = mainPink
+            num = 400
+            angleDiff = Math.PI
+            speed = 0.2
+            speedDiff = 0.08
+        }
+        spawnParticlePatch(particles, message.data.x, message.data.y, message.data.angle, message.data.direction, num, color, angleDiff, speed, speedDiff)
 
     }
 

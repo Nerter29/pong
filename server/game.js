@@ -91,13 +91,11 @@ class Game {
         if(ballX + this.ballRadius> this.screenSize[0]){
             this.scores[0] ++;
             hasToReplay = true;
+
         }
         else if(ballX - this.ballRadius < 0){
             this.scores[1] ++;
             hasToReplay = true;
-        }
-        if(hasToReplay){
-            this.spawnBall()
         }
 
         return hasToReplay
