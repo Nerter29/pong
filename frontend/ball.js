@@ -11,7 +11,7 @@ export class Ball{
         this.trail = []
         this.trailLength = trailLength
 
-        this.trailStartHue = 0.5
+        this.trailStartHue = 0.4
         this.minTrailRadius = 0.5
         
 
