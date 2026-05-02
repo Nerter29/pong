@@ -226,6 +226,7 @@ function gameLoop(room) {
 
     }
     else{
+        
         game.countdownTimer += Date.now() - lastTime
         lastTime= Date.now()
         game.startIn = Math.ceil((game.countdownDuration - game.countdownTimer) / 1000)
@@ -235,7 +236,7 @@ function gameLoop(room) {
         }
     }
     
-
+    console.log(game.countdownTimer)
     //send the state to every clients
     sendDataToRoom(room, game.getState(), "state")
 }
