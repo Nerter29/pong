@@ -59,7 +59,8 @@ const paddleBorderRadius = 2;
 //text
 const scoreSize = 50
 const countdownSize = 100
-const speedMultSize = 12
+const gameInfoSize = 12
+const winnerSize = 30
 //placement of the score texts based on subdivion of screen
 const scoreXScreenDivider = 16
 const scoreYScreenDivider = 10
@@ -73,6 +74,7 @@ var scores = {
     0 : 0,
     1 : 0
 }
+var winCondition;
 
 var paddleList = []
 var ball;
@@ -88,6 +90,7 @@ let particles = [];
 
 var lastTime = Date.now()
 var deltatime = 0
+
 
 function updateInfoBloc(){
     document.getElementById("playerId").innerHTML = `<strong>Identifiant de joueur :</strong> ${playerId}`;
@@ -134,11 +137,23 @@ function displayCountdown(countdown){
     ctx.fillText(countdown, gameScreenSize[0] / 2 - (countdownSize * textMultiplier) / 2 , gameScreenSize[1] / 2 - 100);
 }
 
-function displaySpeedMult(speedMult){
+function displayGameInfo(speedMult, winCondition){
     //display the speed multiplier at the bottom left of the screen
-    ctx.font = speedMultSize + "px Noto";
+    ctx.font = gameInfoSize + "px Noto";
     ctx.fillStyle = lightPink;
-    ctx.fillText("Vitesse : x" + speedMult, 5 , gameScreenSize[1] - 5);
+    ctx.fillText("Vitesse : x" + speedMult + " | Premier à " + winCondition + " de score", 5 , gameScreenSize[1] - 5 );
+}
+
+function displayWinner(winner){
+    var direction = "gauche"
+    if(winner == 1){
+        direction = "droit"
+    }
+    var text = "Le joueur " + direction + " a gagné !"
+    var textMultiplier = 0.46 * text.toString().length
+    ctx.font = winnerSize + "px Noto";
+    ctx.fillStyle = lightBlue;
+    ctx.fillText(text, gameScreenSize[0] / 2 - (winnerSize * textMultiplier) / 2 , gameScreenSize[1] / 2 - 50);
 }
 
 function drawTerrain(){
@@ -208,6 +223,8 @@ function start(){
 
         gameScreenSize = [startInfo.screenWidth, startInfo.screenHeight]
 
+        winCondition = startInfo.winCondition
+
         status = "partie en cours";
         canvasDisplay = "block"
         controlsDisplay = "flex"
@@ -243,13 +260,18 @@ function mainLoop() {
 
         if(gameState.startIn > 0){
             displayCountdown(gameState.startIn)
+            if(gameState.winner != null){
+                displayWinner(gameState.winner)
+            }
+            
         }
+
 
         ballSpeedMultiplier = gameState.ballSpeedMultiplier
     }
     updateParticles(particles, deltatime, ctx)
 
-    displaySpeedMult(ballSpeedMultiplier)
+    displayGameInfo(ballSpeedMultiplier, winCondition)
 
     sendInput()
 
@@ -307,6 +329,7 @@ ws.onmessage = function(event) {
         spawnParticlePatch(particles, message.data.x, message.data.y, message.data.angle, message.data.direction, num, color, angleDiff, speed, speedDiff)
 
     }
+
 
     if (message.type === "error"){
         if(message.code === 0){

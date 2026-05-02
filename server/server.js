@@ -187,7 +187,14 @@ function sendParticleInfo(hasCollidedWithPaddle, hasCollidedWithWall,room, game,
 function gameLoop(room) {
     var game = room.game
     var ball = game.ball
+    
     if(game.startIn == 0){
+
+        if(game.hasToResetScore){
+            game.hasToResetScore = false
+            game.resetScores()
+            sendDataToRoom(room, game.getScores(), "score")
+        }
         var paddles = game.getPaddles()
         var hasCollidedWithWall = ball.move(game.ballSpeedMultiplier)
         var hasCollidedWithPaddle = ball.collideWithPaddles(paddles);
@@ -202,6 +209,13 @@ function gameLoop(room) {
             sendParticleInfo(hasCollidedWithPaddle, hasCollidedWithWall,room, game, ball)
         }
 
+        if(game.gameEnded){
+            game.gameEnded = false
+            game.resetCountdown(game.winCountdown)
+            game.hasToResetScore = true
+            lastTime= Date.now()
+        }
+
         if(hasToReplay){
             game.spawnBall()
             sendDataToRoom(room, game.getScores(), "score")
@@ -209,13 +223,14 @@ function gameLoop(room) {
             ball.bounceCounter = 0
         }
 
+
     }
     else{
         game.countdownTimer += Date.now() - lastTime
         lastTime= Date.now()
-        game.startIn = Math.round((game.startCountdown - game.countdownTimer) / 1000)
-        if(game.countdownTimer > game.startCountdown){
-            game.countdownTimer = game.startCountdown
+        game.startIn = Math.ceil((game.countdownDuration - game.countdownTimer) / 1000)
+        if(game.countdownTimer > game.countdownDuration){
+            game.countdownTimer = game.countdownDuration
             game.startIn = 0
         }
     }

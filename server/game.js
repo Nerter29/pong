@@ -26,6 +26,10 @@ class Game {
             0 : 0,
             1 : 0
         }
+        this.winCondition = 7
+        this.gameEnded = false;
+        this.winner = null;
+        this.hasToResetScore = false
 
         this.ballRadius = 3;
         this.ballStartX = this.screenSize[0] / 2 
@@ -38,9 +42,15 @@ class Game {
 
         this.spawnBall();
 
-        this.startCountdown = 3000;
-        this.countdownTimer = 0;
-        this.startIn = this.startCountdown / 1000
+        this.countdownDuration,
+        this.countdownTimer,
+        this.startIn,
+
+        this.startCountdown = 3000
+        this.winCountdown = 9000
+        
+        this.resetCountdown(this.startCountdown)
+        
 
         this.ballSpeedMultiplier = 1
 
@@ -63,8 +73,23 @@ class Game {
             ballStartX : this.ballStartX,
             ballStartY : this.ballStartY,
             ballRadius : this.ballRadius,
+
+            winCondition : this.winCondition
                         
         }
+    }
+
+    resetScores(){
+        this.scores = {
+            0 : 0,
+            1 : 0
+        }
+    }
+
+    resetCountdown(duration){
+        this.countdownDuration = duration;
+        this.countdownTimer = 0;
+        this.startIn = this.countdownDuration / 1000
     }
 
     spawnBall(){
@@ -92,10 +117,19 @@ class Game {
             this.scores[0] ++;
             hasToReplay = true;
 
+            if(this.scores[0] == this.winCondition){
+                this.gameEnded = true;
+                this.winner = 0
+            }
         }
         else if(ballX - this.ballRadius < 0){
             this.scores[1] ++;
             hasToReplay = true;
+
+            if(this.scores[1] == this.winCondition){
+                this.gameEnded = true;
+                this.winner = 1
+            }
         }
 
         return hasToReplay
@@ -111,7 +145,8 @@ class Game {
             paddles: this.paddlesY,
             ball: this.ball.getPos(),
             startIn: this.startIn,
-            ballSpeedMultiplier : this.ballSpeedMultiplier.toFixed(2)
+            ballSpeedMultiplier : this.ballSpeedMultiplier.toFixed(2),
+            winner : this.winner
         };
     }
 
@@ -126,6 +161,8 @@ class Game {
     getStartInfo(){
         return structuredClone(this.startInfo)
     }
+
+
 }
 
 module.exports = Game;
