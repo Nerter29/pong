@@ -26,7 +26,7 @@ class Game {
             0 : 0,
             1 : 0
         }
-        this.winCondition = 1
+        this.winCondition = 7
         this.gameEnded = false;
         this.winner = null;
         this.hasToResetScore = false
