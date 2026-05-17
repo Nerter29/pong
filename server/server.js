@@ -236,7 +236,7 @@ function gameLoop(room) {
         }
     }
     
-    console.log(game.countdownTimer)
+    //console.log(game.countdownTimer)
     //send the state to every clients
     sendDataToRoom(room, game.getState(), "state")
 }
