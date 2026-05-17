@@ -11,34 +11,48 @@
   </head>
 
   <body>
-    <div class="title-bloc">
-      <h1>Pong Online</h1>
-      <div class="info-bloc">
-        <ul>
-          <li id="playerId">Identifiant de joueur : 0</li>
-          <li id="room">Salle : 0</li>
-          <li id="status">Status : en attente d'un 2ème joueur</li>
-
-        </ul>
+    <div class="page-bloc">
+      
+      <div class="title-bloc">
+        <h1>Pong Online</h1>
+        <div class="info-bloc">
+          <ul class="info-list">
+            <li id="playerId">Identifiant de joueur : 0</li>
+            <li id="room">Salle : 0</li>
+            <li id="status">Status : en attente d'un 2ème joueur</li>
+  
+          </ul>
+        </div>
       </div>
-    </div>
-    <div class="canvas-bloc">
-          <canvas id="game-canvas"></canvas>
-    </div>
-
-    <div class="controls-bloc" id="controls-bloc">
-      <div class="control-text">
-        <p>Déplacez-vous avec les flèches du clavier</p>
-        <img src = "../../../assets/images/po/icons/arrows.png" width="60" height="60">
+      <div class="canvas-bloc">
+        <canvas id="game-canvas"></canvas>
       </div>
-      <div class="button-group">
-        <button class="control-btn" id="up-btn"></button>
-        <button class="control-btn" id="down-btn"></button>
+      <div class="bottom-box">
+        <div class="controls-bloc" id="controls-bloc">
+          <div class="control-text">
+            <p>Déplacez-vous avec les flèches du clavier</p>
+            <img src = "../../../assets/images/po/icons/arrows.png" width="60" height="60">
+          </div>
+          <div class="button-group">
+            <button class="control-btn" id="up-btn"></button>
+            <button class="control-btn" id="down-btn"></button>
+          </div>
+        </div>
+        <div class="chat-box" id="chat-box">
+          <h2>Chat</h2>
+          <ul class="chat-message-list" id="chat-message-list">
+
+          </ul>
+          <div class="input-box">
+            <input type="text" id="chatInput" placeholder="message">
+            <button class="send-button" onclick="sendChatMessage()">Envoyer</button>
+          </div>
+          
+        </div>
       </div>
       
+      
+      <script type="module" src="frontend/main.js"></script>
     </div>
-    
-    
-    <script type="module" src="frontend/main.js"></script>
   </body>
 </html>

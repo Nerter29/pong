@@ -310,20 +310,27 @@ wss.on("connection", function (ws, req) {
 
     ws.on("message", function (message) {
         let messageParsed;
-
+        
         try {
             messageParsed = JSON.parse(message.toString());
         } catch (e) {
             console.log("json message bad format")
             return;
         }
+        var room = ws.room;
 
         if (messageParsed.type === "input") {
-
-            var room = ws.room;
             //handle inputs of clients
             room.game.handleInput(ws.playerId, messageParsed.input);
 
+        }
+
+        if(messageParsed.type === "chatMessage"){
+            //send back the message received to everyone
+            var data = {message : messageParsed.message,
+                        playerId : messageParsed.playerId}
+            sendDataToRoom(room, data, "chatMessage")
+            
         }
     });
 

@@ -13,7 +13,7 @@ const params = new URLSearchParams(window.location.search);
 const wantedRoomId = params.get("room");
 
 let ws = new WebSocket(`wss://nerter.fr/pong/?room=${wantedRoomId}`);
-//ws = new WebSocket(`http://127.0.0.1:3001/?room=${wantedRoomId}`);
+ws = new WebSocket(`http://127.0.0.1:3001/?room=${wantedRoomId}`);
 
 //global variables used to store all the game informations thanks to the on message function down bellow
 let roomId = 0;
@@ -33,12 +33,22 @@ const ctx = gameCanvas.getContext('2d');
 var canvasSize = [gameCanvas.width, gameCanvas.height];
 var gameScreenSize = canvasSize;
 
+
+let chatInput = document.getElementById("chatInput");
+let chatListFrame = document.getElementById("chat-message-list")
+
+chatInput.addEventListener("keydown", (event) =>{
+    if(event.key == "Enter"){
+        sendChatMessage();
+    }
+})
+
 //the proportion of the window that is filled by the canvas
-var windowFilling = 0.75;
+var windowFilling = 0.65;
 
 //@media equivalent
 if (window.matchMedia("(min-width: 1000px)").matches) {//horizontal
-    windowFilling = 0.75
+    windowFilling = 0.65
 }
 if (window.matchMedia("(max-width: 1000px)").matches) {//vertical
     windowFilling = 0.95
@@ -98,6 +108,7 @@ function updateInfoBloc(){
     document.getElementById("status").innerHTML = `<strong>Status :</strong> ${status}`;
     document.getElementById("game-canvas").style.display = canvasDisplay;
     document.getElementById("controls-bloc").style.display = controlsDisplay;
+    document.getElementById("chat-box").style.display = controlsDisplay;
 }
 
 function activateArrowButtons(){
@@ -330,6 +341,10 @@ ws.onmessage = function(event) {
 
     }
 
+    if(message.type === "chatMessage"){
+        updateChatFrame(message.data.playerId, message.data.message)
+    }
+
 
     if (message.type === "error"){
         if(message.code === 0){
@@ -386,4 +401,39 @@ function sendInput(){
     }
 }
 
+function sendChatMessage(){
+    
+    let message = chatInput.value
+
+    if(message){
+        ws.send(JSON.stringify({
+            type: "chatMessage",
+            playerId : playerId,
+            message: message
+        }))
+    }
+    chatInput.value = "";
+
+}
+
+function updateChatFrame(id, message){
+    var messageLi = document.createElement("li")
+
+    var prettyMessage;
+    if(id == playerId){
+        prettyMessage = `<span id=\"focused\">Toi</span> : <span id=\"pink-text\">${message}</span>`;
+    }
+    else{
+        prettyMessage = `<span id=\"unfocused\">Adversaire</span> : ${message}`;
+    }
+
+    messageLi.innerHTML = `${prettyMessage}`
+
+    chatListFrame.appendChild(messageLi)
+
+    chatListFrame.scrollTop = chatListFrame.scrollHeight
+
+}
+
+window.sendChatMessage = sendChatMessage;
 
